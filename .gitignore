@@ -1,0 +1,30 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Dependencies
+vendor/
+node_modules/
+
+# Build output
+frontend/*/dist/
+
+backend/storage/
+backend/bootstrap/cache/*.php
+
+# Docker volumes
+tmp/
+
+# Caches
+.npm/
+.composer/
+
+# Claude Code
+.claude/
+
+# User config
+.config/
+
+# IDE
+.idea/

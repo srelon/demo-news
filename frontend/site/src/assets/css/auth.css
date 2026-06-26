@@ -1,0 +1,155 @@
+.auth-input-wrap {
+    position: relative;
+}
+
+.auth-input-inner {
+    position: relative;
+}
+
+.auth-input-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    line-height: 1;
+    color: #aaa;
+    display: flex;
+    align-items: center;
+}
+
+.auth-input-toggle:hover {
+    color: #555;
+}
+
+.auth-field-error {
+    font-size: 12px;
+    color: #dc3545;
+    margin-top: 4px;
+}
+
+.auth-input-disabled {
+    background: #f8f8f8 !important;
+    color: #aaa !important;
+    cursor: not-allowed;
+}
+
+.auth-fields {
+    margin-bottom: 4px;
+}
+
+.auth-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.auth-input {
+    border-radius: 6px;
+    border-color: #ddd;
+    font-size: 14px;
+    height: 42px;
+    transition: border-color 0.15s;
+}
+
+.auth-input:focus {
+    border-color: #222;
+    box-shadow: none;
+}
+
+.auth-btn {
+    background: #222;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    height: 44px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-btn:hover:not(:disabled) {
+    background: #17b978;
+    color: #fff;
+}
+
+.auth-btn:disabled {
+    background: #666;
+    pointer-events: none;
+    cursor: default;
+}
+
+.auth-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: auth-spin 0.7s linear infinite;
+    display: inline-block;
+}
+
+@keyframes auth-spin {
+    to { transform: rotate(360deg); }
+}
+
+.auth-switch {
+    text-align: center;
+    margin-top: 18px;
+    margin-bottom: 0;
+    font-size: 13px;
+    color: #888;
+}
+
+.auth-switch a {
+    color: #222;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.auth-switch a:hover {
+    color: #17b978;
+}
+
+.auth-hint {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.auth-forgot-row {
+    text-align: right;
+    margin-top: -6px;
+    margin-bottom: 12px;
+}
+
+.auth-link-sm {
+    font-size: 12px;
+    color: #555;
+    text-decoration: underline;
+}
+
+.auth-link-sm:hover {
+    color: #17b978;
+}
+
+.auth-sent {
+    text-align: center;
+    padding: 12px 0;
+}
+
+.auth-sent p {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 16px;
+}

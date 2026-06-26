@@ -1,0 +1,39 @@
+services:
+  frontend-admin:
+    image: node:20-alpine
+    user: "1000:1000"
+    working_dir: /var/www/frontend/admin
+    volumes:
+      - ./:/var/www
+    ports:
+      - "5200:5200"
+    command: sh -c "npm install && npm run dev"
+    container_name: dashboard_frontend_admin
+    profiles:
+      - admin
+
+  frontend-site:
+    image: node:20-alpine
+    user: "1000:1000"
+    working_dir: /var/www/frontend/site
+    volumes:
+      - ./:/var/www
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev"
+    container_name: dashboard_frontend_site
+    profiles:
+      - site
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    depends_on:
+      - db
+    container_name: dashboard_phpmyadmin

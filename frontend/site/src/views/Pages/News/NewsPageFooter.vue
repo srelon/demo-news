@@ -1,0 +1,62 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+interface ArticleTag {
+  id: number
+  name: string
+  slug: string
+}
+
+const props = defineProps<{
+  tags: ArticleTag[]
+  title: string
+  image: string
+}>()
+
+const page_url = computed(() => encodeURIComponent(window.location.href))
+const page_title = computed(() => encodeURIComponent(props.title))
+const page_image = computed(() => {
+  const img = props.image.startsWith('http') ? props.image : window.location.origin + props.image
+  return encodeURIComponent(img)
+})
+
+const share_facebook = computed(() => `https://www.facebook.com/sharer/sharer.php?u=${page_url.value}`)
+const share_twitter = computed(() => `https://twitter.com/intent/tweet?url=${page_url.value}&text=${page_title.value}`)
+const share_telegram = computed(() => `https://t.me/share/url?url=${page_url.value}&text=${page_title.value}`)
+const share_pinterest = computed(() => `https://pinterest.com/pin/create/button/?url=${page_url.value}&media=${page_image.value}&description=${page_title.value}`)
+</script>
+
+<template>
+  <div v-if="tags.length" class="flex-s-s p-t-12 p-b-15">
+    <span class="f1-s-12 cl5 m-r-8">Tags:</span>
+    <div class="flex-wr-s-s size-w-0">
+      <router-link
+        v-for="tag in tags"
+        :key="tag.id"
+        :to="{ name: 'news_tag', params: { slug: tag.slug } }"
+        class="f1-s-12 cl8 hov-link1 m-r-15"
+      >
+        {{ tag.name }}
+      </router-link>
+    </div>
+  </div>
+
+  <div class="flex-s-s">
+    <span class="f1-s-12 cl5 p-t-1 m-r-15">Share:</span>
+
+    <div class="flex-wr-s-s size-w-0">
+      <a :href="share_facebook" target="_blank" rel="noopener" class="dis-block f1-s-13 cl0 bg-facebook borad-3 p-tb-4 p-rl-18 hov-btn1 m-r-3 m-b-3 trans-03">
+        <i class="fab fa-facebook-f m-r-7"></i>Facebook
+      </a>
+      <a :href="share_twitter" target="_blank" rel="noopener" class="dis-block f1-s-13 cl0 bg-twitter borad-3 p-tb-4 p-rl-18 hov-btn1 m-r-3 m-b-3 trans-03">
+        <i class="fab fa-twitter m-r-7"></i>Twitter
+      </a>
+      <a :href="share_telegram" target="_blank" rel="noopener" class="dis-block f1-s-13 cl0 bg-telegram borad-3 p-tb-4 p-rl-18 hov-btn1 m-r-3 m-b-3 trans-03">
+        <i class="fab fa-telegram-plane m-r-7"></i>Telegram
+      </a>
+      <a :href="share_pinterest" target="_blank" rel="noopener" class="dis-block f1-s-13 cl0 bg-pinterest borad-3 p-tb-4 p-rl-18 hov-btn1 m-r-3 m-b-3 trans-03">
+        <i class="fab fa-pinterest-p m-r-7"></i>Pinterest
+      </a>
+    </div>
+  </div>
+</template>

@@ -1,0 +1,82 @@
+services:
+  nginx:
+    image: nginx:latest
+    environment:
+      - SITE_DOMAIN=${SITE_DOMAIN}
+      - ADMIN_DOMAIN=${ADMIN_DOMAIN}
+      - API_DOMAIN=${API_DOMAIN}
+      - SITE_PORT=${SITE_PORT}
+      - ADMIN_PORT=${ADMIN_PORT}
+      - API_PORT=${API_PORT}
+    volumes:
+      - ./:/var/www
+      - ./_docker/nginx/conf.d/templates/:/etc/nginx/templates/
+    ports:
+      - "${SITE_PORT}:${SITE_PORT}"
+      - "${ADMIN_PORT}:${ADMIN_PORT}"
+      - "${API_PORT}:${API_PORT}"
+    container_name: dashboard_nginx
+    depends_on:
+      app:
+        condition: service_started
+  app:
+    build:
+      context: .
+      dockerfile: _docker/app/Dockerfile
+    user: "1000:1000"
+    volumes:
+      - ./:/var/www
+    command: sh /var/www/_docker/app/entrypoint.sh
+    depends_on:
+      - db
+    container_name: dashboard_app
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: _docker/app/Dockerfile
+    user: "1000:1000"
+    volumes:
+      - ./:/var/www
+    command: sh /var/www/_docker/app/scheduler-entrypoint.sh
+    depends_on:
+      - app
+      - db
+    restart: unless-stopped
+    container_name: dashboard_scheduler
+
+  websocket:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./websocket:/app
+    command: sh -c "npm install --silent && node server.js"
+    environment:
+      - REDIS_HOST=redis
+      - WS_PORT=6001
+    ports:
+      - "6001:6001"
+    depends_on:
+      - redis
+    restart: always
+    container_name: dashboard_websocket
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    container_name: dashboard_redis
+
+  db:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - ./tmp/db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "8101:3306"
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci ${MYSQL_EXTRA_FLAGS:-}
+    container_name: dashboard_db
