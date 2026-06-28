@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\Admins\AdminAccessesEditRequest;
 use App\Http\Requests\Admin\Admins\AdminCreateRequest;
 use App\Http\Requests\Admin\Admins\AdminEditRequest;
 use App\Http\Requests\Admin\Admins\AdminRuleCreateRequest;
+use App\Models\Admin\AdminLog;
 use App\Services\Admin\AdminRuleService;
 use App\Services\Admin\AdminService;
 use Illuminate\Http\JsonResponse;
@@ -76,6 +77,16 @@ class AdminsController extends Controller
         }
 
         return $this->respondWithJson($data);
+    }
+
+    public function logs(int $id, Request $request): JsonResponse
+    {
+        $logs = AdminLog::where('admin_id', $id)
+            ->select(['id', 'admin_id', 'ip', 'browser', 'created_at'])
+            ->orderByDesc('created_at')
+            ->paginate($request->per_page ?? 20);
+
+        return $this->respondWithJson($logs);
     }
 
     public function edit(int $id, AdminEditRequest $request): JsonResponse

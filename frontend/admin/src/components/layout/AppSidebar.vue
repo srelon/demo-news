@@ -27,7 +27,7 @@ const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
 const siteUrl = import.meta.env.VITE_SITE_URL ?? '/'
 const base = import.meta.env.BASE_URL
 
-const menuGroups = [
+const menuGroups = computed(() => [
   {
     title: "Menu",
     items: [
@@ -48,10 +48,22 @@ const menuGroups = [
         name: "News",
         assets: "articles",
         subItems: [
-          { name: "Articles",   path: "articles" },
-          { name: "Categories", path: "categories" },
-          { name: "Tags",       path: "tags" },
-          { name: "RSS Sources", path: "rss_sources" },
+          {
+            name: "Articles",
+            path: "articles",
+          },
+          {
+            name: "Categories",
+            path: "categories",
+          },
+          {
+            name: "Tags",
+            path: "tags",
+          },
+          {
+            name: "RSS Sources",
+            path: "rss_sources",
+          },
         ],
       },
       {
@@ -71,8 +83,14 @@ const menuGroups = [
         name: "Admins",
         assets: "admins",
         subItems: [
-          { name: "Admins", path: "admins" },
-          { name: "Rules", path: "admins.rules" }
+          {
+            name: "Admins",
+            path: "admins",
+          },
+          {
+            name: "Rules",
+            path: "admins.rules",
+          },
         ],
       },
       {
@@ -80,13 +98,19 @@ const menuGroups = [
         name: "Debug",
         assets: "debug",
         subItems: [
-          { name: "Logs",  path: "debug" },
-          { name: "Tests", path: "tests" },
+          {
+            name: "Logs",
+            path: "debug",
+          },
+          {
+            name: "Tests",
+            path: "tests",
+          },
         ],
-      }
+      },
     ],
   },
-  {
+  ...(!auth.is_production ? [{
     title: "Tools",
     items: [
       {
@@ -96,14 +120,14 @@ const menuGroups = [
         assets: "debug",
       },
     ],
-  },
+  }] : []),
   // {
   //   title: "Others",
   //   items: [
   //
   //   ],
   // },
-];
+])
 
 const isActive = (path) => route.name === path;
 
@@ -113,7 +137,7 @@ const toggleSubmenu = (groupIndex, itemIndex) => {
 };
 
 const isAnySubmenuRouteActive = computed(() => {
-  return menuGroups.some((group) =>
+  return menuGroups.value.some((group) =>
       group.items.some(
           (item) =>
               item.subItems && item.subItems.some((subItem) => isActive(subItem.path))
@@ -126,7 +150,7 @@ const isSubmenuOpen = (groupIndex, itemIndex) => {
   return (
       openSubmenu.value === key ||
       (isAnySubmenuRouteActive.value &&
-          menuGroups[groupIndex].items[itemIndex].subItems?.some((subItem) =>
+          menuGroups.value[groupIndex].items[itemIndex].subItems?.some((subItem) =>
               isActive(subItem.path)
           ))
   );

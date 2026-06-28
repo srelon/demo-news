@@ -12,8 +12,9 @@ type User = {
 }
 
 export const useAuthStore = defineStore('auth', {
-    state: (): { user: User | null } => ({
-        user: null
+    state: (): { user: User | null, is_production: boolean } => ({
+        user: null,
+        is_production: false,
     }),
     getters: {
         accesses: (state) => {
@@ -28,6 +29,7 @@ export const useAuthStore = defineStore('auth', {
         fetchUser() {
             return axios.get('info').then((res) => {
                 this.user = res.data.data.user
+                this.is_production = res.data.data.is_production ?? false
             })
         },
         setUser(user: User) {

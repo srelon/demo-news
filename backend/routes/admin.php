@@ -29,11 +29,13 @@ Route::prefix('users')->controller(UsersController::class)->group(function () {
     Route::post('/', 'users')->name('admin.users')->middleware('access:users.view');
     Route::get('/{id}', 'info')->middleware('access:users.view');
     Route::post('/edit/{id}', 'edit')->middleware('access:users.edit');
+    Route::post('/logs/{id}', 'logs')->middleware('access:users.view');
 });
 
 Route::prefix('admins')->controller(AdminsController::class)->group(function () {
     Route::post('/', 'admins')->name('admin.admins')->middleware('access:admins.view');
     Route::get('/info/{id}', 'info')->middleware('access:admins.view');
+    Route::post('/logs/{id}', 'logs')->middleware('access:admins.view');
     Route::get('/rules', 'rules')->middleware('access:admins.view');
     Route::post('/rules/create', 'rulesCreate')->middleware('access:admins.edit');
     Route::post('/create', 'create')->middleware('access:admins.edit');
