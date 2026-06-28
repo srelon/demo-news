@@ -1,6 +1,8 @@
 include .env
 export
 
+DOCKER_COMPOSE := $(shell docker compose version > /dev/null 2>&1 && echo "docker compose" || echo "docker-compose")
+
 PROFILES = --profile admin --profile site
 
 COMPOSE_FILES = -f docker-compose.yml
@@ -9,7 +11,7 @@ ifneq ("$(wildcard /etc/letsencrypt/live)","")
 endif
 
 up:
-	docker compose $(COMPOSE_FILES) up -d
+	$(DOCKER_COMPOSE) $(COMPOSE_FILES) up -d
 	@echo ""
 	@if [ -d /etc/letsencrypt/live ]; then \
 		echo "  Site:   https://$$SSL_DOMAIN"; \
@@ -24,40 +26,40 @@ up:
 	@echo "Waiting for app to start..."
 
 down:
-	docker compose $(PROFILES) down
+	$(DOCKER_COMPOSE) $(PROFILES) down
 
 logs:
-	docker-compose logs -f
+	$(DOCKER_COMPOSE) logs -f
 
 logs-nginx:
-	docker-compose logs -f nginx
+	$(DOCKER_COMPOSE) logs -f nginx
 
 logs-app:
-	docker-compose logs -f app
+	$(DOCKER_COMPOSE) logs -f app
 
 logs-db:
-	docker-compose logs -f db
+	$(DOCKER_COMPOSE) logs -f db
 
 scheduler-logs:
 	docker logs -f dashboard_scheduler
 
 scheduler-restart:
-	docker compose restart scheduler
+	$(DOCKER_COMPOSE) restart scheduler
 
 pma:
-	docker compose --profile phpmyadmin up -d
+	$(DOCKER_COMPOSE) --profile phpmyadmin up -d
 	@echo ""
 	@echo "  phpMyAdmin:  http://127.0.0.1:8080"
 	@echo ""
 
 admin:
-	docker compose --profile admin up -d
+	$(DOCKER_COMPOSE) --profile admin up -d
 	@echo ""
 	@echo "  Admin dev:  http://127.0.0.1:5200"
 	@echo ""
 
 site:
-	docker compose --profile site up -d
+	$(DOCKER_COMPOSE) --profile site up -d
 	@echo ""
 	@echo "  Site dev:  http://127.0.0.1:5173"
 	@echo ""
