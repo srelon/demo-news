@@ -2,6 +2,8 @@
 
 Full-stack news/blog platform with real-time features. Laravel 11 API + Vue 3 admin & site frontends.
 
+**Live demo:** https://demo-news.duckdns.org
+
 ## Stack
 
 | Layer            | Technology                                               |
@@ -24,19 +26,21 @@ Full-stack news/blog platform with real-time features. Laravel 11 API + Vue 3 ad
 
 ```bash
 cp .env.example .env && cp backend/.env.example backend/.env
+# Edit .env and backend/.env with your values
 docker compose up -d --build
 make up
-# Waiting start dashboard_app (first start 2-3m)
+# First start takes 2-3 minutes
 docker exec -w /var/www/backend dashboard_app php artisan db:seed
 ```
 
 ## Commands
 
 ```bash
-make up     # Start core services (nginx, app, db)
-make down   # Stop everything including frontend dev servers
+make up     # Start core services — auto-detects local vs server
+make down   # Stop everything
 make admin  # Start admin frontend dev server  →  http://127.0.0.1:5200
 make site   # Start site frontend dev server   →  http://127.0.0.1:5173
+make pma    # Start phpMyAdmin                 →  http://127.0.0.1:8080
 ```
 
 ## Artisan & Composer
@@ -45,7 +49,6 @@ make site   # Start site frontend dev server   →  http://127.0.0.1:5173
 # Enter container shell
 docker exec -it dashboard_app bash
 
-# Artisan
 docker exec -w /var/www/backend dashboard_app php artisan <command>
 docker exec -w /var/www/backend dashboard_app php artisan migrate
 docker exec -w /var/www/backend dashboard_app php artisan migrate:rollback
@@ -53,44 +56,86 @@ docker exec -w /var/www/backend dashboard_app php artisan test
 docker exec -w /var/www/backend dashboard_app php artisan test --filter=TestName
 
 # Seeders
-docker exec -w /var/www/backend dashboard_app php artisan db:seed                            # all seeders
-docker exec -w /var/www/backend dashboard_app php artisan db:seed --class=AccessesSeeder    # sync admin_accesses keys
+docker exec -w /var/www/backend dashboard_app php artisan db:seed
+docker exec -w /var/www/backend dashboard_app php artisan db:seed --class=AccessesSeeder
 
 # Composer
-docker exec -w /var/www/backend dashboard_app composer <command>
 docker exec -w /var/www/backend dashboard_app composer require <package>
 ```
 
-## URLs
+## URLs (local)
 
-| Service          | URL                       |
-|------------------|---------------------------|
-| Site             | http://127.0.0.1:8880     |
-| Admin panel      | http://127.0.0.1:8881     |
-| API              | http://127.0.0.1:8000     |
-| Admin dev server | http://127.0.0.1:5200     |
-| Site dev server  | http://127.0.0.1:5173     |
-| phpMyAdmin       | http://127.0.0.1:8080     |
-| MySQL (direct)   | 127.0.0.1:8101            |
-| WebSocket        | ws://127.0.0.1:6001       |
+| Service          | URL                              |
+|------------------|----------------------------------|
+| Site             | http://127.0.0.1:8880            |
+| Admin panel      | http://127.0.0.1:8880/admin/     |
+| API              | http://127.0.0.1:8880/api/       |
+| Admin dev server | http://127.0.0.1:5200            |
+| Site dev server  | http://127.0.0.1:5173            |
+| phpMyAdmin       | http://127.0.0.1:8080 (make pma) |
+| MySQL (direct)   | 127.0.0.1:8101                   |
+| WebSocket        | ws://127.0.0.1:6001              |
 
-phpMyAdmin credentials: `root` / `root`
+## Environment
+
+Root `.env` controls Docker/Nginx. `backend/.env` controls Laravel. Never merge them.
+
+| Variable     | Default  | Description                     |
+|--------------|----------|---------------------------------|
+| `SITE_PORT`  | `8880`   | Exposed port (local)            |
+| `ADMIN_PATH` | `/admin` | URL prefix for admin panel      |
+
+To change admin path: set `ADMIN_PATH=/manage` in root `.env` and `VITE_ADMIN_BASE=/manage/` in `frontend/admin/.env.*`, then rebuild.
+
+## Nginx routing (single port)
+
+All traffic enters on `SITE_PORT`, routed by path:
+
+- `/api/*` → Laravel PHP-FPM
+- `/storage/*` → Laravel public storage
+- `/${ADMIN_PATH}/*` → Admin Vue SPA
+- `/*` → Site Vue SPA
+
+## Docker Compose files
+
+| File                        | Purpose                                      |
+|-----------------------------|----------------------------------------------|
+| `docker-compose.yml`        | Base config — all environments               |
+| `docker-compose.override.yml` | Local dev — auto-loaded, adds port & phpMyAdmin |
+| `docker-compose.server.yml` | Server only — SSL, ports 80/443              |
+
+`make up` auto-detects the environment: if `/etc/letsencrypt/live` exists, `docker-compose.server.yml` is included automatically.
+
+### Server setup
+
+Create `docker-compose.server.yml` on the server (see template in `_docker/nginx/conf.d/templates-ssl/`) and add to root `.env`:
+
+```env
+SSL_DOMAIN=yourdomain.com
+SITE_PORT=443
+ADMIN_PATH=/admin
+```
 
 ## Project Structure
 
 ```
-├── backend/            # Laravel 11 API
+├── backend/                  # Laravel 11 API
 ├── frontend/
-│   ├── admin/          # Admin panel (Vue 3 + Tailwind)
-│   └── site/           # Public site (Vue 3 + Bootstrap)
-├── websocket/          # Node.js WebSocket server
-│   ├── server.js       # Entry point — WS + Redis routing
-│   ├── redis.js        # ioredis client
+│   ├── admin/                # Admin panel (Vue 3 + Tailwind)
+│   └── site/                 # Public site (Vue 3 + Bootstrap)
+├── websocket/                # Node.js WebSocket server
+│   ├── server.js             # Entry point — WS + Redis routing
+│   ├── redis.js              # ioredis client
 │   └── channels/
-│       ├── tags.js          # Broadcast tags to all clients
-│       ├── article.js       # Per-article comment/like events
-│       └── notification.js  # Per-user notifications
-└── _docker/            # Nginx templates, PHP-FPM, entrypoint
+│       ├── tags.js           # Broadcast tags to all clients
+│       ├── article.js        # Per-article comment/like events
+│       └── notification.js   # Per-user notifications
+└── _docker/
+    ├── nginx/conf.d/
+    │   ├── templates/        # HTTP templates (local)
+    │   └── templates-ssl/    # HTTPS templates (server)
+    ├── app/                  # PHP-FPM Dockerfile + entrypoint
+    └── ...
 ```
 
 ## Real-time Architecture
@@ -99,11 +144,11 @@ phpMyAdmin credentials: `root` / `root`
 PHP (Predis) ──publish──► Redis ──subscribe──► Node.js ──ws──► Browser
 ```
 
-| Channel                  | Scope                                         |
-|--------------------------|-----------------------------------------------|
-| `tags.updated`           | Broadcast to all connected clients            |
-| `article.{id}`           | Users currently viewing that article          |
-| `notification.{user_id}` | A specific authenticated user                 |
+| Channel                  | Scope                             |
+|--------------------------|-----------------------------------|
+| `tags.updated`           | Broadcast to all connected clients |
+| `article.{id}`           | Users viewing that article        |
+| `notification.{user_id}` | A specific authenticated user     |
 
 ## Rebuild
 

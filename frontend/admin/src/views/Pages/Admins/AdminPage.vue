@@ -90,6 +90,7 @@ interface AdminUser {
 
 const user = ref<AdminUser | null>(null)
 const base_url = import.meta.env.VITE_API_BASE_URL
+const base = import.meta.env.BASE_URL
 
 const schema = object({
     password: string().nullable().transform(val => val === '' ? null : val).min(6),
@@ -144,7 +145,7 @@ onMounted(() => {
                                         for="img"
                                         class="relative w-20 h-20 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800 cursor-pointer group"
                                     >
-                                        <img :src="user.img ? base_url + user.img : '/images/user/default.jpg'" alt="user" class="w-full h-full object-cover" />
+                                        <img :src="user.img ? base_url + user.img : `${base}images/user/default.jpg`" alt="user" class="w-full h-full object-cover" />
                                         <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                             <CameraIcon class="w-6 h-6 text-white" />
                                         </div>

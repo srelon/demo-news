@@ -1,11 +1,22 @@
 PROFILES = --profile admin --profile site
 
+COMPOSE_FILES = -f docker-compose.yml
+ifneq ("$(wildcard /etc/letsencrypt/live)","")
+    COMPOSE_FILES += -f docker-compose.server.yml
+endif
+
 up:
-	docker compose up -d
+	docker compose $(COMPOSE_FILES) up -d
 	@echo ""
-	@echo "  API:    http://127.0.0.1:8000"
-	@echo "  Admin:  http://127.0.0.1:8881"
-	@echo "  Site:   http://127.0.0.1:8880"
+	@if [ -d /etc/letsencrypt/live ]; then \
+		echo "  Site:   https://$$SSL_DOMAIN"; \
+		echo "  Admin:  https://$$SSL_DOMAIN$$ADMIN_PATH/"; \
+		echo "  API:    https://$$SSL_DOMAIN/api/"; \
+	else \
+		echo "  Site:   http://127.0.0.1:$$SITE_PORT"; \
+		echo "  Admin:  http://127.0.0.1:$$SITE_PORT$$ADMIN_PATH/"; \
+		echo "  API:    http://127.0.0.1:$$SITE_PORT/api/"; \
+	fi
 	@echo ""
 	@echo "Waiting for app to start..."
 
@@ -17,6 +28,12 @@ scheduler-logs:
 
 scheduler-restart:
 	docker compose restart scheduler
+
+pma:
+	docker compose --profile phpmyadmin up -d
+	@echo ""
+	@echo "  phpMyAdmin:  http://127.0.0.1:8080"
+	@echo ""
 
 admin:
 	docker compose --profile admin up -d
