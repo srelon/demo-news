@@ -1,3 +1,6 @@
+include .env
+export
+
 PROFILES = --profile admin --profile site
 
 COMPOSE_FILES = -f docker-compose.yml
@@ -22,6 +25,18 @@ up:
 
 down:
 	docker compose $(PROFILES) down
+
+logs:
+	docker-compose logs -f
+
+logs-nginx:
+	docker-compose logs -f nginx
+
+logs-app:
+	docker-compose logs -f app
+
+logs-db:
+	docker-compose logs -f db
 
 scheduler-logs:
 	docker logs -f dashboard_scheduler
