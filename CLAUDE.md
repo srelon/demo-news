@@ -116,10 +116,28 @@ URLs: Site `http://127.0.0.1:8880`, Admin `http://127.0.0.1:8880/admin/`, API `h
 All traffic runs on a single port (`SITE_PORT`), routed by Nginx path:
 - `/api/*` → Laravel PHP-FPM
 - `/storage/*` → Laravel public storage
+- `/ws/` → WebSocket proxy → `websocket:6001` (nginx proxies WSS→WS in production)
 - `/${ADMIN_PATH}/*` → Admin Vue SPA (default `/admin`)
 - `/*` → Site Vue SPA
 
-Root `.env` controls Docker/Nginx (`SITE_DOMAIN`, `SITE_PORT`, `ADMIN_PATH`). `backend/.env` controls Laravel. Never merge them.
+Root `.env` controls Docker/Nginx (`SITE_PORT`, `ADMIN_PATH`, `SSL_DOMAIN`). `backend/.env` controls Laravel. Never merge them.
+
+## Docker Compose files
+
+| File | Purpose |
+|------|---------|
+| `docker-compose.yml` | Base — all environments |
+| `docker-compose.override.yml` | Local dev — auto-loaded, adds port & phpMyAdmin profile |
+| `docker-compose.server.yml` | Server only — SSL (ports 80/443), nginx templates-ssl |
+
+`make up` auto-detects: if `/etc/letsencrypt/live` exists → includes `docker-compose.server.yml`.  
+Makefile auto-detects `docker compose` vs `docker-compose` via shell check — no manual sed needed.
+
+## Frontend env files
+
+`frontend/admin/.env.production` and `frontend/site/.env.production` are **NOT in git** (`git rm --cached` was run). Edit manually on server after each `git pull`. Local dev uses `.env.local`.
+
+`VITE_WS_URL` must end with `/ws/` (trailing slash) — nginx location `^~ /ws/` requires it.
 
 ## Architecture
 

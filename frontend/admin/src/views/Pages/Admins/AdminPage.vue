@@ -60,6 +60,12 @@ const form = ref([
         placeholder: 'Status',
         type: 'select',
     },
+    ...(auth.accesses('admins', 'edit') ? [{
+        name: 'allowed_ip',
+        model: null,
+        placeholder: 'Allowed IP (leave empty to allow any)',
+        type: 'text',
+    }] : []),
 ])
 
 const options = ref<Record<string, any>>({
@@ -134,6 +140,7 @@ onMounted(() => {
                 route_back="admins"
                 :options="options"
                 :schema="schema"
+                :access="auth.accesses('admins', 'edit')"
                 @updateForm="fillForm"
             >
                 <template #top_content>

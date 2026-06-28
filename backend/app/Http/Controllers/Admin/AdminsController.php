@@ -11,6 +11,7 @@ use App\Services\Admin\AdminRuleService;
 use App\Services\Admin\AdminService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminsController extends Controller
 {
@@ -35,6 +36,12 @@ class AdminsController extends Controller
 
         if (!$admin) {
             return $this->respondWithError(['message' => __('User no found')], 404);
+        }
+
+        $requester = Auth::guard('admin')->user();
+        $accesses = $requester->rule->accesses_id ?? [];
+        if (!($accesses['admins']['edit'] ?? false)) {
+            $admin->makeHidden('allowed_ip');
         }
 
         return $this->respondWithJson([

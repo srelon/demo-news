@@ -59,7 +59,8 @@ class AdminService
         }
 
         $admin->rule_id = $data['rule_id'];
-        $admin->status  = $data['status'];
+        $admin->status = $data['status'];
+        $admin->allowed_ip = $data['allowed_ip'] ?? null;
         $admin->save();
 
         return AdminUsers::getProfile($id);

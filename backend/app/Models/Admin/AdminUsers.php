@@ -25,6 +25,7 @@ class AdminUsers extends Authenticatable
         'img',
         'email',
         'password',
+        'allowed_ip',
         'debug_last_seen_at',
     ];
 
@@ -50,7 +51,7 @@ class AdminUsers extends Authenticatable
 
 
     static function getProfile($public_id) {
-        return AdminUsers::select(['admin_users.id', 'admin_users.rule_id', 'admin_rules.accesses_id', 'admin_users.img', 'admin_users.email', 'admin_users.status',  'admin_users.name'])
+        return AdminUsers::select(['admin_users.id', 'admin_users.rule_id', 'admin_rules.accesses_id', 'admin_users.img', 'admin_users.email', 'admin_users.status', 'admin_users.name', 'admin_users.allowed_ip'])
             ->where('admin_users.id', $public_id)
             ->join('admin_rules', 'admin_rules.id','=','admin_users.rule_id')
 //            ->join('collections', 'collections.id','=','users.avatar_id')

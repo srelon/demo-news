@@ -3,7 +3,7 @@ export
 
 DOCKER_COMPOSE := $(shell docker compose version > /dev/null 2>&1 && echo "docker compose" || echo "docker-compose")
 
-PROFILES = --profile admin --profile site
+PROFILES = --profile admin --profile site --profile phpmyadmin
 
 COMPOSE_FILES = -f docker-compose.yml
 ifneq ("$(wildcard /etc/letsencrypt/live)","")
@@ -26,7 +26,7 @@ up:
 	@echo "Waiting for app to start..."
 
 down:
-	$(DOCKER_COMPOSE) $(PROFILES) down
+	$(DOCKER_COMPOSE) $(PROFILES) down --remove-orphans
 
 logs:
 	$(DOCKER_COMPOSE) logs -f

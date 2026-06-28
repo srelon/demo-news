@@ -58,6 +58,12 @@ const form = ref([
         placeholder: 'New password',
         type: 'password',
     },
+    {
+        name: 'allowed_ip',
+        model: null,
+        placeholder: 'Allowed IP (leave empty to allow any)',
+        type: 'text',
+    },
 ])
 
 const options = ref<Record<string, any>>({})

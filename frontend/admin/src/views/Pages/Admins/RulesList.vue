@@ -2,7 +2,9 @@
 import {ref, reactive} from "vue";
 import AdminLayout from '@/components/layout/AdminLayout.vue'
 import PageBreadcrumb from "@/components/common/PageBreadcrumb.vue";
+import { useAuthStore } from '@/stores/auth'
 
+const auth = useAuthStore()
 const currentPageTitle = ref("Rules");
 import BaseTablePagination from "@/components/ui/base/BaseTablePagination.vue";
 import BaseBtn from "@/components/ui/base/BaseBtn.vue";
@@ -42,7 +44,7 @@ const headers = reactive([
 
       >
         <template #header_right>
-          <BaseBtn :to="{name: 'admins.rules.create'}" color="info">Create Role</BaseBtn>
+          <BaseBtn v-if="auth.accesses('admins', 'edit')" :to="{name: 'admins.rules.create'}" color="info">Create Role</BaseBtn>
         </template>
         <template #active="{data}">
           <div class="flex items-right w-full gap-2">
