@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\User\UserEditRequest;
+use App\Models\User;
+use App\Models\UserLog;
 use App\Services\Admin\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -30,6 +32,16 @@ class UsersController extends Controller
         }
 
         return $this->respondWithJson($user);
+    }
+
+    public function logs(int $id, Request $request): JsonResponse
+    {
+        $logs = UserLog::where('user_id', $id)
+            ->select(['id', 'user_id', 'ip', 'browser', 'created_at'])
+            ->orderByDesc('created_at')
+            ->paginate($request->per_page ?? 20);
+
+        return $this->respondWithJson($logs);
     }
 
     public function edit(string $id, UserEditRequest $request): JsonResponse

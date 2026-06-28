@@ -7,10 +7,12 @@ use App\Http\Requests\Admin\Admins\AdminAccessesEditRequest;
 use App\Http\Requests\Admin\Admins\AdminCreateRequest;
 use App\Http\Requests\Admin\Admins\AdminEditRequest;
 use App\Http\Requests\Admin\Admins\AdminRuleCreateRequest;
+use App\Models\Admin\AdminLog;
 use App\Services\Admin\AdminRuleService;
 use App\Services\Admin\AdminService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminsController extends Controller
 {
@@ -35,6 +37,12 @@ class AdminsController extends Controller
 
         if (!$admin) {
             return $this->respondWithError(['message' => __('User no found')], 404);
+        }
+
+        $requester = Auth::guard('admin')->user();
+        $accesses = $requester->rule->accesses_id ?? [];
+        if (!($accesses['admins']['edit'] ?? false)) {
+            $admin->makeHidden('allowed_ip');
         }
 
         return $this->respondWithJson([
@@ -69,6 +77,16 @@ class AdminsController extends Controller
         }
 
         return $this->respondWithJson($data);
+    }
+
+    public function logs(int $id, Request $request): JsonResponse
+    {
+        $logs = AdminLog::where('admin_id', $id)
+            ->select(['id', 'admin_id', 'ip', 'browser', 'created_at'])
+            ->orderByDesc('created_at')
+            ->paginate($request->per_page ?? 20);
+
+        return $this->respondWithJson($logs);
     }
 
     public function edit(int $id, AdminEditRequest $request): JsonResponse

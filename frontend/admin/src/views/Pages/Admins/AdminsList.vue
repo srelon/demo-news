@@ -2,8 +2,9 @@
 import {ref, reactive} from "vue";
 import AdminLayout from '@/components/layout/AdminLayout.vue'
 import PageBreadcrumb from "@/components/common/PageBreadcrumb.vue";
+import { useAuthStore } from '@/stores/auth'
 
-
+const auth = useAuthStore()
 const currentPageTitle = ref("Admins");
 import BaseTablePagination from "@/components/ui/base/BaseTablePagination.vue";
 import BaseBtn from "@/components/ui/base/BaseBtn.vue";
@@ -51,7 +52,7 @@ const base = import.meta.env.BASE_URL
 
       >
         <template #header_right>
-          <BaseBtn :to="{name: 'admin.create'}" color="info">Create Admin</BaseBtn>
+          <BaseBtn v-if="auth.accesses('admins', 'edit')" :to="{name: 'admin.create'}" color="info">Create Admin</BaseBtn>
         </template>
         <template #name="{data}">
           <router-link :to="{name: 'admin', params: {id: data.id}}" class="flex items-center gap-3">

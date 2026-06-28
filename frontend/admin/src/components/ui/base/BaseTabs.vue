@@ -19,7 +19,7 @@ function changeTab(data) {
 
 <template>
   <div>
-    <div class="p-3 border border-gray-200 rounded-t-xl dark:border-gray-800">
+    <div v-if="tabs.length > 1" class="p-3 border border-gray-200 rounded-t-xl dark:border-gray-800">
       <nav class="flex overflow-x-auto rounded-lg bg-gray-100 p-1 dark:bg-gray-900 [&amp;::-webkit-scrollbar]:h-1.5 [&amp;::-webkit-scrollbar-track]:bg-white dark:[&amp;::-webkit-scrollbar-track]:bg-transparent [&amp;::-webkit-scrollbar-thumb]:rounded-full [&amp;::-webkit-scrollbar-thumb]:bg-gray-200 dark:[&amp;::-webkit-scrollbar-thumb]:bg-gray-600">
         <button
             v-for="(item, key) in tabs" :key="key"
@@ -30,7 +30,7 @@ function changeTab(data) {
         </button>
       </nav>
     </div>
-    <div class="p-6 pt-4 border border-t-0 border-gray-200 rounded-b-xl dark:border-gray-800">
+    <div :class="tabs.length > 1 ? 'p-6 pt-4 border border-t-0 border-gray-200 rounded-b-xl dark:border-gray-800' : 'border border-gray-200 rounded-xl dark:border-gray-800'">
       <slot></slot>
     </div>
   </div>

@@ -36,6 +36,17 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        $user = Auth::guard('admin')->user();
+
+        if ($user->allowed_ip && $user->allowed_ip !== $this->ip()) {
+            Auth::guard('admin')->logout();
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => __('auth.failed'),
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

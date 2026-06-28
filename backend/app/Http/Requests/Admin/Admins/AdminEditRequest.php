@@ -19,6 +19,7 @@ class AdminEditRequest extends FormRequest
             'rule_id' => ['required', 'exists:admin_rules,id'],
             'status' => ['required'],
             'password' => ['nullable', 'min:6', Rules\Password::defaults()],
+            'allowed_ip' => ['nullable', 'ip'],
         ];
     }
 }

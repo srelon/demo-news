@@ -14,6 +14,7 @@ class DashboardController extends Controller
     {
         return $this->respondWithJson([
             'user' => $this->dashboard_service->getCurrentAdmin($request),
+            'is_production' => app()->isProduction(),
         ]);
     }
 

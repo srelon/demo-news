@@ -22,7 +22,7 @@ class ProfileController extends Controller
 
     public function info(): JsonResponse
     {
-        $admin = AdminUsers::select(['id', 'rule_id', 'name', 'email', 'img', 'status', 'created_at'])
+        $admin = AdminUsers::select(['id', 'rule_id', 'name', 'email', 'img', 'status', 'created_at', 'allowed_ip'])
             ->find(Auth::guard('admin')->id());
 
         return $this->respondWithJson(['admin' => $admin]);
@@ -44,9 +44,13 @@ class ProfileController extends Controller
             $admin->name = $request->validated()['name'];
         }
 
+        if (array_key_exists('allowed_ip', $request->validated())) {
+            $admin->allowed_ip = $request->validated()['allowed_ip'];
+        }
+
         $admin->save();
 
-        $updated = AdminUsers::select(['id', 'rule_id', 'name', 'email', 'img', 'status', 'created_at'])
+        $updated = AdminUsers::select(['id', 'rule_id', 'name', 'email', 'img', 'status', 'created_at', 'allowed_ip'])
             ->find($admin->id);
 
         return $this->respondWithJson(['admin' => $updated]);
