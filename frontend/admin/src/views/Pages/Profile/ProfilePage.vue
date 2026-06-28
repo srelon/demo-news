@@ -13,6 +13,7 @@ import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()
 const base_url = import.meta.env.VITE_API_BASE_URL
+const base = import.meta.env.BASE_URL
 
 const page_title = ref('My Profile')
 const breadcrumb = ref<any[]>([])
@@ -194,7 +195,7 @@ onMounted(() => {
                         <div class="flex items-center gap-4 px-6 py-5 border-b border-gray-100 dark:border-gray-800">
                             <div class="w-14 h-14 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700 shrink-0">
                                 <img
-                                    :src="user.img ? base_url + user.img : '/images/user/default.jpg'"
+                                    :src="user.img ? base_url + user.img : `${base}images/user/default.jpg`"
                                     alt="avatar"
                                     class="w-full h-full object-cover"
                                 />

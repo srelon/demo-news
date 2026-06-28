@@ -1,4 +1,8 @@
 services:
+  nginx:
+    ports:
+      - "${SITE_PORT}:${SITE_PORT}"
+
   frontend-admin:
     image: node:20-alpine
     user: "1000:1000"
@@ -37,3 +41,5 @@ services:
     depends_on:
       - db
     container_name: dashboard_phpmyadmin
+    profiles:
+      - phpmyadmin

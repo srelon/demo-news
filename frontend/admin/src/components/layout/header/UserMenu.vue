@@ -46,6 +46,7 @@ onUnmounted(() => {
 })
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL
+const base = import.meta.env.BASE_URL
 
 </script>
 
@@ -56,7 +57,7 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL
       @click.prevent="toggleDropdown"
     >
       <span class="mr-3 overflow-hidden rounded-full h-11 w-11">
-        <img :src="(auth.user.img) ? baseUrl+auth.user.img : '/images/user/owner.jpg'" alt="User" />
+        <img :src="(auth.user.img) ? baseUrl+auth.user.img : `${base}images/user/owner.jpg`" alt="User" />
       </span>
       <span class="block mr-1 font-medium text-theme-sm">{{ auth.user.name }} </span>
 

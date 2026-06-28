@@ -25,6 +25,7 @@ const route = useRoute();
 const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
 
 const siteUrl = import.meta.env.VITE_SITE_URL ?? '/'
+const base = import.meta.env.BASE_URL
 
 const menuGroups = [
   {
@@ -91,7 +92,7 @@ const menuGroups = [
       {
         icon: ShieldIcon,
         name: "Telescope",
-        href: (import.meta.env.VITE_API_BASE_URL ?? 'http://127.0.0.1:8000/') + 'telescope',
+        href: (import.meta.env.VITE_API_BASE_URL ?? 'http://127.0.0.1:8880/') + 'telescope',
         assets: "debug",
       },
     ],
@@ -169,7 +170,7 @@ const endTransition = (el) => {
         <img
           v-if="isExpanded || isHovered || isMobileOpen"
           class="dark:hidden"
-          src="/images/logo/logo.svg"
+          :src="`${base}images/logo/logo.svg`"
           alt="Logo"
           width="150"
           height="40"
@@ -177,14 +178,14 @@ const endTransition = (el) => {
         <img
           v-if="isExpanded || isHovered || isMobileOpen"
           class="hidden dark:block"
-          src="/images/logo/logo-dark.svg"
+          :src="`${base}images/logo/logo-dark.svg`"
           alt="Logo"
           width="150"
           height="40"
         />
         <img
           v-else
-          src="/images/logo/logo-icon.svg"
+          :src="`${base}images/logo/logo-icon.svg`"
           alt="Logo"
           width="32"
           height="32"

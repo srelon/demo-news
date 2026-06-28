@@ -1,0 +1,11 @@
+services:
+  nginx:
+    environment:
+      - SSL_DOMAIN=${SSL_DOMAIN}
+    volumes:
+      - ./:/var/www
+      - ./_docker/nginx/conf.d/templates-ssl/:/etc/nginx/templates/
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    ports:
+      - "80:80"
+      - "443:443"

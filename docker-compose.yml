@@ -2,19 +2,11 @@ services:
   nginx:
     image: nginx:latest
     environment:
-      - SITE_DOMAIN=${SITE_DOMAIN}
-      - ADMIN_DOMAIN=${ADMIN_DOMAIN}
-      - API_DOMAIN=${API_DOMAIN}
       - SITE_PORT=${SITE_PORT}
-      - ADMIN_PORT=${ADMIN_PORT}
-      - API_PORT=${API_PORT}
+      - ADMIN_PATH=${ADMIN_PATH}
     volumes:
       - ./:/var/www
       - ./_docker/nginx/conf.d/templates/:/etc/nginx/templates/
-    ports:
-      - "${SITE_PORT}:${SITE_PORT}"
-      - "${ADMIN_PORT}:${ADMIN_PORT}"
-      - "${API_PORT}:${API_PORT}"
     container_name: dashboard_nginx
     depends_on:
       app:

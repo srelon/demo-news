@@ -33,6 +33,7 @@ const headers = reactive([
 ]);
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL
+const base = import.meta.env.BASE_URL
 </script>
 
 <template>
@@ -47,7 +48,7 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL
         <template #name="{data}">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 overflow-hidden rounded-full">
-              <img :src="(data.img) ? baseUrl+data.img : '/images/user/owner.jpg'" :alt="data.name"></div>
+              <img :src="(data.img) ? baseUrl+data.img : `${base}images/user/owner.jpg`" :alt="data.name"></div>
             <div>
               <span class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">{{ data.name }}</span>
             </div>

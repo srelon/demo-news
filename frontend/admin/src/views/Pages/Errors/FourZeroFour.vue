@@ -11,9 +11,9 @@
         ERROR
       </h1>
 
-      <img src="/images/error/404.svg" alt="404" class="dark:hidden" />
+      <img :src="`${base}images/error/404.svg`" alt="404" class="dark:hidden" />
       <img
-        src="/images/error/404-dark.svg"
+        :src="`${base}images/error/404-dark.svg`"
         alt="404"
         class="hidden dark:block"
       />
@@ -45,4 +45,5 @@ import { ref } from "vue";
 import CommonGridShape from "@/components/common/CommonGridShape.vue";
 
 const currentYear = ref(new Date().getFullYear());
+const base = import.meta.env.BASE_URL
 </script>

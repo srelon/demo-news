@@ -111,7 +111,15 @@ docker exec -it -w /var/www/backend dashboard_app php artisan test
 docker exec -it -w /var/www/backend dashboard_app php artisan test --filter=TestName
 ```
 
-URLs: API `http://127.0.0.1:8000`, Admin `http://127.0.0.1:8881`, Site `http://127.0.0.1:8880`
+URLs: Site `http://127.0.0.1:8880`, Admin `http://127.0.0.1:8880/admin/`, API `http://127.0.0.1:8880/api/`
+
+All traffic runs on a single port (`SITE_PORT`), routed by Nginx path:
+- `/api/*` → Laravel PHP-FPM
+- `/storage/*` → Laravel public storage
+- `/${ADMIN_PATH}/*` → Admin Vue SPA (default `/admin`)
+- `/*` → Site Vue SPA
+
+Root `.env` controls Docker/Nginx (`SITE_DOMAIN`, `SITE_PORT`, `ADMIN_PATH`). `backend/.env` controls Laravel. Never merge them.
 
 ## Architecture
 

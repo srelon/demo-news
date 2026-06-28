@@ -37,6 +37,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const auth = useAuthStore();
+const base = import.meta.env.BASE_URL
 const loading= ref(false);
 function onSubmit(_: any, {setErrors}: any) {
   if(!loading.value) {
@@ -140,7 +141,7 @@ function onSubmit(_: any, {setErrors}: any) {
             <common-grid-shape />
             <div class="flex flex-col items-center max-w-xs">
               <router-link to="/" class="block mb-4">
-                <img width="{231}" height="{48}" src="/images/logo/auth-logo.svg" alt="Logo" />
+                <img width="{231}" height="{48}" :src="`${base}images/logo/auth-logo.svg`" alt="Logo" />
               </router-link>
               <p class="text-center text-gray-400 dark:text-white/60">
                 Tailwind CSS Admin Dashboard Template
