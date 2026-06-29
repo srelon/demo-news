@@ -18,12 +18,18 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!Auth::guard('admin')->check()) {
+        if (!Auth::guard('admin')->check()) {
             return $this->respondWithError([
-                "message"=> __('Unauthorized')
+                'message' => __('Unauthorized'),
             ], 401);
         }
 
+        if (Auth::guard('admin')->user()->status !== 1) {
+            Auth::guard('admin')->logout();
+            return $this->respondWithError([
+                'message' => 'Account is not active.',
+            ], 401);
+        }
 
         return $next($request);
     }

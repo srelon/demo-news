@@ -1,7 +1,7 @@
 import axiosLib from 'axios';
 import Cookies from 'js-cookie';
 import router from "@/routes/router.ts";
-
+import { useAuthStore } from '@/stores/auth'
 import { useToast } from 'vue-toastification'
 
 const toast = useToast();
@@ -44,7 +44,11 @@ axios.interceptors.response.use(
 
         // Handle known error statuses
         if (response.status === 401) {
-            console.error('Validation errors', response.data)
+            const auth = useAuthStore()
+            auth.user = null
+            if (router.currentRoute.value.name !== 'login') {
+                router.push({ name: 'login' })
+            }
         } else if (response.status === 404) {
             router.push({ name: 'error_404' })
         } else if (response.data?.message) {

@@ -70,7 +70,6 @@ const tab_props = computed(() => {
 <style scoped>
 .auth-box {
     background: #fff;
-    border-radius: 10px;
     padding: 40px 44px 36px;
     width: 100%;
     max-width: 420px;
@@ -78,6 +77,16 @@ const tab_props = computed(() => {
     overflow-y: auto;
     position: relative;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 600px) {
+    .auth-box {
+        max-width: 100%;
+        min-height: 100vh;
+        max-height: none;
+        padding: 40px 24px 36px;
+        box-shadow: none;
+    }
 }
 
 .auth-close {

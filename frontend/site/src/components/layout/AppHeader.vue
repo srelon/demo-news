@@ -71,14 +71,10 @@ function logout() {
             <div class="topbar">
                 <div class="content-topbar container h-100">
 
-                    <!-- Left: links + social icons -->
+                    <!-- Left: links -->
                     <div class="left-topbar">
                         <router-link :to="{name: 'static_page', params: {slug: 'about'}}" class="left-topbar-item">About</router-link>
                         <router-link :to="{name: 'static_page', params: {slug: 'contact'}}" class="left-topbar-item">Contact</router-link>
-                        <a href="#" class="left-topbar-item"><span class="fab fa-facebook-f"></span></a>
-                        <a href="#" class="left-topbar-item"><span class="fab fa-twitter"></span></a>
-                        <a href="#" class="left-topbar-item"><span class="fab fa-vimeo-v"></span></a>
-                        <a href="#" class="left-topbar-item"><span class="fab fa-youtube"></span></a>
                     </div>
 
                     <!-- Right: auth section — uses left-topbar to match styles -->
@@ -128,12 +124,6 @@ function logout() {
                     <li class="left-topbar">
                         <router-link :to="{name: 'static_page', params: {slug: 'about'}}" class="left-topbar-item">About</router-link>
                         <router-link :to="{name: 'static_page', params: {slug: 'contact'}}" class="left-topbar-item">Contact</router-link>
-                        <a href="#" class="left-topbar-item"><span class="fab fa-facebook-f"></span></a>
-                        <a href="#" class="left-topbar-item"><span class="fab fa-twitter"></span></a>
-                        <a href="#" class="left-topbar-item"><span class="fab fa-vimeo-v"></span></a>
-                        <a href="#" class="left-topbar-item"><span class="fab fa-youtube"></span></a>
-                    </li>
-                    <li class="right-topbar">
                         <template v-if="authStore.user">
                             <NotificationBell class="left-topbar-item" />
                             <a

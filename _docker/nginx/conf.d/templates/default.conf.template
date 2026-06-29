@@ -1,3 +1,8 @@
+map $http_user_agent $is_social_bot {
+    default 0;
+    "~*(TelegramBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Slackbot|Googlebot|bingbot|DuckDuckBot)" 1;
+}
+
 server {
     listen ${SITE_PORT};
     server_name _;
@@ -107,6 +112,11 @@ server {
 
     location / {
         root /var/www/frontend/site/dist;
+
+        if ($is_social_bot) {
+            return 302 /api/og-preview?path=$uri;
+        }
+
         try_files $uri $uri/ /index.html;
     }
 }

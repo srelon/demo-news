@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Traits\RespondTrait;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckAdminAccess
@@ -24,6 +25,13 @@ class CheckAdminAccess
             return $this->respondWithError([
                 "message"=> __('Access denied')
             ], 403);
+        }
+
+        if ($user->status !== 1) {
+            Auth::guard('admin')->logout();
+            return $this->respondWithError([
+                "message" => 'Account is not active.',
+            ], 401);
         }
 
         $accesses = $user->rule->accesses_id ?? [];
