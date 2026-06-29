@@ -139,7 +139,7 @@ const rejected_headers = reactive([
         text: 'Date',
         time: true,
     },
-    ...(auth.accesses('rss', 'edit') ? [{
+    ...(auth.accesses('articles', 'edit') ? [{
         key: 'action',
         text: 'Action',
     }] : []),
@@ -235,7 +235,7 @@ function retryItem(data: any, force = false) {
                 >
                     <!-- Imported articles -->
                     <div v-if="active_tab === 'Imported'">
-                        <ArticlesTable ref="articles_table" :params="{ rss_source_id: source.id }">
+                        <ArticlesTable ref="articles_table" :params="{ rss_source_id: source.id }" :update_url="false">
                             <template #header_right>
                                 <BaseBtn
                                     v-if="auth.accesses('rss', 'edit')"
@@ -261,9 +261,10 @@ function retryItem(data: any, force = false) {
                             route="rss/items"
                             :headers="rejected_headers"
                             :params="{ source_id: source.id }"
+                            :update_url="false"
                         >
                             <template #header_right>
-                                <template v-if="auth.accesses('rss', 'edit')">
+                                <template v-if="auth.accesses('articles', 'edit')">
                                     <BaseBtn
                                         color="error"
                                         add_class="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5"

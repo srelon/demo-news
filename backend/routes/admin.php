@@ -96,11 +96,11 @@ Route::prefix('rss')->controller(RssSourcesController::class)->group(function ()
     Route::get('/', 'list')->middleware('access:rss.view');
     Route::get('/options', 'options')->middleware('access:rss.view');
     Route::post('/items', 'items')->middleware('access:rss.view');
-    Route::post('/retry/{id}', 'retry')->middleware('access:rss.edit');
-    Route::post('/items/delete/{id}', 'deleteItem')->middleware('access:rss.edit');
-    Route::post('/items/delete-rejected', 'deleteRejected')->middleware('access:rss.edit');
+    Route::post('/retry/{id}', 'retry')->middleware('access:articles.edit');
+    Route::post('/items/delete/{id}', 'deleteItem')->middleware('access:articles.edit');
+    Route::post('/items/delete-rejected', 'deleteRejected')->middleware('access:articles.edit');
     Route::post('/refresh-articles', 'refreshArticles')->middleware('access:rss.edit');
-    Route::post('/retry-all', 'retryAll')->middleware('access:rss.edit');
+    Route::post('/retry-all', 'retryAll')->middleware('access:articles.edit');
     Route::post('/fetch', 'fetch')->middleware('access:rss.edit');
     Route::post('/create', 'create')->middleware('access:rss.edit');
     Route::post('/edit/{id}', 'edit')->middleware('access:rss.edit');
