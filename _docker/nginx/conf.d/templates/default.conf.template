@@ -118,6 +118,7 @@ server {
         fastcgi_param HTTP_X_FORWARDED_FOR $proxy_add_x_forwarded_for;
         fastcgi_param HTTP_X_REAL_IP $remote_addr;
 
+        fastcgi_hide_header Set-Cookie;
         fastcgi_hide_header Cache-Control;
         add_header Cache-Control "public, max-age=3600" always;
     }

@@ -8,6 +8,8 @@ use App\Models\UserLog;
 use App\Services\Admin\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class UsersController extends Controller
 {
@@ -42,6 +44,19 @@ class UsersController extends Controller
             ->paginate($request->per_page ?? 20);
 
         return $this->respondWithJson($logs);
+    }
+
+    public function loginAsUser(string $id): JsonResponse
+    {
+        $user = User::where('public_id', $id)->first();
+
+        if (!$user) {
+            return $this->respondWithError(['message' => __('User not found')], 404);
+        }
+
+        Session::put(Auth::guard('web')->getName(), $user->id);
+
+        return $this->respondWithJson(['ok' => true]);
     }
 
     public function edit(string $id, UserEditRequest $request): JsonResponse

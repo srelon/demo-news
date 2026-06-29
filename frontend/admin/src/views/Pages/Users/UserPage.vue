@@ -87,6 +87,13 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL
 const base = import.meta.env.BASE_URL
 
 const options = ref<Record<string, any>>({})
+const site_url = import.meta.env.VITE_SITE_URL
+
+function loginAsUser() {
+    axios.post(`users/login/${route.params.id}`).then(() => {
+        window.open(site_url, '_blank')
+    })
+}
 
 function fillForm(data: intUser) {
     user.value = data
@@ -147,7 +154,7 @@ function fillForm(data: intUser) {
                                                 {{ moment.utc(user.created_at).format('DD.MM.YYYY') }}
                                             </p>
                                         </div>
-                                        <BaseBtn color="success" v-if="auth.accesses('admins', 'edit')">
+                                        <BaseBtn color="success" v-if="auth.accesses('users', 'edit')" @click="loginAsUser">
                                             Login user
                                         </BaseBtn>
                                     </div>
