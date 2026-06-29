@@ -10,14 +10,23 @@ interface ArticleTag {
 const props = defineProps<{
   tags: ArticleTag[]
   title: string
+  excerpt?: string
+  image?: string
 }>()
 
 const page_url = computed(() => encodeURIComponent(window.location.href))
-const page_title = computed(() => encodeURIComponent(props.title))
+const page_excerpt = computed(() => encodeURIComponent(props.excerpt ?? ''))
 
 const share_facebook = computed(() => `https://www.facebook.com/sharer/sharer.php?u=${page_url.value}`)
-const share_twitter = computed(() => `https://twitter.com/intent/tweet?url=${page_url.value}&text=${page_title.value}`)
-const share_telegram = computed(() => `https://t.me/share/url?url=${page_url.value}&text=${page_title.value}`)
+const share_twitter = computed(() => {
+  const text = page_excerpt.value ? `&text=${page_excerpt.value}` : ''
+  return `https://twitter.com/intent/tweet?url=${page_url.value}${text}`
+})
+const share_telegram = computed(() => {
+  const text = page_excerpt.value ? `&text=${page_excerpt.value}` : ''
+  return `https://t.me/share/url?url=${page_url.value}${text}`
+})
+
 </script>
 
 <template>
