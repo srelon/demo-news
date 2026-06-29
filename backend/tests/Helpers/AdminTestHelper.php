@@ -19,6 +19,7 @@ trait AdminTestHelper
             'name' => 'Test Admin',
             'email' => 'admin_' . uniqid() . '@test.com',
             'password' => bcrypt('password'),
+            'status' => 1,
         ]);
     }
 

@@ -26,6 +26,7 @@ class AdminUsers extends Authenticatable
         'email',
         'password',
         'allowed_ip',
+        'status',
         'debug_last_seen_at',
     ];
 
