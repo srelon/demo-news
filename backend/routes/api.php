@@ -5,12 +5,9 @@ use App\Http\Controllers\Site\HomeController;
 use App\Http\Controllers\Site\LayoutController;
 use App\Http\Controllers\Site\NewsController;
 use App\Http\Controllers\Site\NotificationController;
-use App\Http\Controllers\Site\OgPreviewController;
 use App\Http\Controllers\Site\ProfileController;
 use App\Http\Controllers\Site\SubscribeController;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/og-preview', OgPreviewController::class);
 
 Route::get('/layout', [LayoutController::class, 'index']);
 Route::get('/home', [HomeController::class, 'index']);

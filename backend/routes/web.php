@@ -1,11 +1,6 @@
 <?php
 
+use App\Http\Controllers\Site\SpaController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::middleware('auth:api')->get('/user-profile', function() {
-    return auth()->user();
-});
+Route::get('{any}', SpaController::class)->where('any', '.*');
