@@ -25,13 +25,6 @@ const layoutStore = useLayoutStore()
                 Any questions? Call us on (+1) 96 716 6879
               </p>
 
-              <div class="p-t-15">
-                <a href="#" class="fs-18 cl11 hov-cl10 trans-03 m-r-8"><span class="fab fa-facebook-f"></span></a>
-                <a href="#" class="fs-18 cl11 hov-cl10 trans-03 m-r-8"><span class="fab fa-twitter"></span></a>
-
-                <a href="#" class="fs-18 cl11 hov-cl10 trans-03 m-r-8"><span class="fab fa-vimeo-v"></span></a>
-                <a href="#" class="fs-18 cl11 hov-cl10 trans-03 m-r-8"><span class="fab fa-youtube"></span></a>
-              </div>
             </div>
           </div>
 
@@ -41,7 +34,7 @@ const layoutStore = useLayoutStore()
             </div>
 
             <ul>
-              <li v-for="post in layoutStore.footer.popular_posts" :key="post.slug" class="flex-wr-sb-s p-b-20">
+              <li v-for="post in layoutStore.footer.popular_posts.slice(0, 3)" :key="post.slug" class="flex-wr-sb-s p-b-20">
                 <router-link
                   :to="{name: 'news_category', params: {category: post.category_slug}}"
                   class="size-w-4 wrap-pic-w hov1 trans-03"
