@@ -67,7 +67,7 @@ class NewsTest extends TestCase
 
         $this->getJson("/api/news/{$cat->slug}/{$sub->slug}/articles")
             ->assertStatus(200)
-            ->assertJsonStructure(['data' => ['data', 'current_page', 'last_page']]);
+            ->assertJsonStructure(['data' => ['data', 'pagination' => ['current_page', 'last_page']]]);
     }
 
     // ── Article ───────────────────────────────────────────────────────────────

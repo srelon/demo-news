@@ -120,7 +120,7 @@ class RssTest extends TestCase
         $source = $this->createSource($sub->id);
         $item = $this->createItem($source->id);
 
-        $this->actingAs($this->adminWithFull('rss'), 'admin')
+        $this->actingAs($this->adminWithFull('articles'), 'admin')
             ->postJson("/api/admin/rss/items/delete/{$item->id}")
             ->assertStatus(200)
             ->assertJsonPath('data.deleted', true);
@@ -155,7 +155,7 @@ class RssTest extends TestCase
         $imported = $this->createItem($source->id, 'imported');
         $ignored = $this->createItem($source->id, 'ignored');
 
-        $this->actingAs($this->adminWithFull('rss'), 'admin')
+        $this->actingAs($this->adminWithFull('articles'), 'admin')
             ->postJson('/api/admin/rss/items/delete-rejected', ['source_id' => $source->id])
             ->assertStatus(200)
             ->assertJsonPath('data.deleted', 3);
@@ -176,7 +176,7 @@ class RssTest extends TestCase
         $this->createItem($source_a->id, 'rejected');
         $item_b = $this->createItem($source_b->id, 'rejected');
 
-        $this->actingAs($this->adminWithFull('rss'), 'admin')
+        $this->actingAs($this->adminWithFull('articles'), 'admin')
             ->postJson('/api/admin/rss/items/delete-rejected', ['source_id' => $source_a->id])
             ->assertStatus(200)
             ->assertJsonPath('data.deleted', 1);

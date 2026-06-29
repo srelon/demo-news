@@ -22,7 +22,7 @@ class SpaController extends Controller
             $og = $this->resolveArticleOg($parts, $request);
 
             if ($og) {
-                $html = str_replace('</head>', $this->buildOgTags($og) . '</head>', $html);
+                $html = str_replace('<head>', '<head>' . $this->buildOgTags($og), $html);
             }
         }
 
