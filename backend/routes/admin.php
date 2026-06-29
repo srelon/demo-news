@@ -30,6 +30,7 @@ Route::prefix('users')->controller(UsersController::class)->group(function () {
     Route::get('/{id}', 'info')->middleware('access:users.view');
     Route::post('/edit/{id}', 'edit')->middleware('access:users.edit');
     Route::post('/logs/{id}', 'logs')->middleware('access:users.view');
+    Route::post('/login/{id}', 'loginAsUser')->middleware('access:users.edit');
 });
 
 Route::prefix('admins')->controller(AdminsController::class)->group(function () {

@@ -105,6 +105,7 @@ const menuGroups = [
           {
             name: "Tests",
             path: "tests",
+            hide_in_production: true,
           },
         ],
       },
@@ -335,7 +336,8 @@ const endTransition = (el) => {
                     "
                     >
                       <ul class="mt-2 space-y-1 ml-9">
-                        <li v-for="subItem in item.subItems" :key="subItem.name">
+                        <template v-for="subItem in item.subItems" :key="subItem.name">
+                        <li v-if="!(subItem.hide_in_production && auth.is_production)">
                           <router-link
                               exact
                               :to="{name: subItem.path}"
@@ -388,6 +390,7 @@ const endTransition = (el) => {
                           </span>
                           </router-link>
                         </li>
+                        </template>
                       </ul>
                     </div>
                   </transition>
