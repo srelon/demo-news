@@ -20,7 +20,8 @@ services:
       - ./:/var/www
     command: sh /var/www/_docker/app/entrypoint.sh
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     container_name: dashboard_app
 
   scheduler:
@@ -32,8 +33,10 @@ services:
       - ./:/var/www
     command: sh /var/www/_docker/app/scheduler-entrypoint.sh
     depends_on:
-      - app
-      - db
+      app:
+        condition: service_started
+      db:
+        condition: service_healthy
     restart: unless-stopped
     container_name: dashboard_scheduler
 
@@ -71,4 +74,10 @@ services:
     ports:
       - "8101:3306"
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci ${MYSQL_EXTRA_FLAGS:-}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     container_name: dashboard_db

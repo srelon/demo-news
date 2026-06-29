@@ -42,7 +42,7 @@ onBeforeUnmount(() => document.removeEventListener('click', onClickOutside))
 
 <template>
     <div ref="wrap" class="nb-wrap">
-        <button class="nb-btn" @click.stop="toggle" title="Notifications">
+        <button :class="['nb-btn', { 'nb-btn--active': open }]" @click.stop="toggle" title="Notifications">
             <i class="fa fa-bell"></i>
             <span v-if="notifStore.unread_count > 0" class="nb-badge">
                 {{ notifStore.unread_count > 99 ? '99+' : notifStore.unread_count }}
@@ -109,7 +109,8 @@ onBeforeUnmount(() => document.removeEventListener('click', onClickOutside))
     transition: color 0.2s;
 }
 
-.nb-btn:hover { color: #17b978; }
+.nb-btn:hover,
+.nb-btn--active { color: #17b978; }
 
 .nb-badge {
     position: absolute;
@@ -140,6 +141,21 @@ onBeforeUnmount(() => document.removeEventListener('click', onClickOutside))
     box-shadow: 0 8px 32px rgba(0,0,0,0.12);
     z-index: 9999;
     overflow: hidden;
+}
+
+@media (max-width: 991px) {
+    .nb-dropdown {
+        position: fixed;
+        top: 150px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+        overflow-y: auto;
+    }
 }
 
 .nb-head {

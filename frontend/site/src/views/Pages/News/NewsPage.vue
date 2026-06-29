@@ -86,6 +86,8 @@ function loadArticle(category: string, subcategory: string, slug: string) {
         title: data.article.seo_title || data.article.title,
         description: data.article.seo_description || data.article.excerpt,
         keywords: data.article.seo_keywords,
+        image: data.article.image ? toImageUrl(data.article.image) : null,
+        url: window.location.href,
       })
     })
 }

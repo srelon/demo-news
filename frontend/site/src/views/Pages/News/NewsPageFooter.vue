@@ -23,7 +23,6 @@ const page_image = computed(() => {
 const share_facebook = computed(() => `https://www.facebook.com/sharer/sharer.php?u=${page_url.value}`)
 const share_twitter = computed(() => `https://twitter.com/intent/tweet?url=${page_url.value}&text=${page_title.value}`)
 const share_telegram = computed(() => `https://t.me/share/url?url=${page_url.value}&text=${page_title.value}`)
-const share_pinterest = computed(() => `https://pinterest.com/pin/create/button/?url=${page_url.value}&media=${page_image.value}&description=${page_title.value}`)
 </script>
 
 <template>
@@ -53,9 +52,6 @@ const share_pinterest = computed(() => `https://pinterest.com/pin/create/button/
       </a>
       <a :href="share_telegram" target="_blank" rel="noopener" class="dis-block f1-s-13 cl0 bg-telegram borad-3 p-tb-4 p-rl-18 hov-btn1 m-r-3 m-b-3 trans-03">
         <i class="fab fa-telegram-plane m-r-7"></i>Telegram
-      </a>
-      <a :href="share_pinterest" target="_blank" rel="noopener" class="dis-block f1-s-13 cl0 bg-pinterest borad-3 p-tb-4 p-rl-18 hov-btn1 m-r-3 m-b-3 trans-03">
-        <i class="fab fa-pinterest-p m-r-7"></i>Pinterest
       </a>
     </div>
   </div>

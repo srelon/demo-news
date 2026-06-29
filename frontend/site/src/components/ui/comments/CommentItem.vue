@@ -433,38 +433,36 @@ onBeforeUnmount(() => {
 
 <template>
     <div :id="`comment-${comment.id}`" class="ci-wrap" :class="{ 'ci-reply': is_reply, 'ci-anchored': is_anchored }">
-        <!-- Avatar -->
-        <div class="ci-avatar-col">
-            <div class="ci-avatar">
-                <img v-if="comment.user?.img" :src="toImageUrl(comment.user.img)" :alt="comment.user.name" />
-                <i v-else class="fa fa-user"></i>
-            </div>
-        </div>
-
         <div class="ci-body">
             <!-- Header row -->
             <div class="ci-header">
                 <div class="ci-header-left">
-                    <div class="ci-name-row">
-                        <span class="ci-name">{{ comment.user?.name ?? 'Deleted user' }}</span>
-                        <span v-if="comment.user?.username" class="ci-username">@{{ comment.user.username }}</span>
-                        <!-- Moderator badge -->
-                        <span v-if="comment.user?.is_moderator" class="ci-mod-badge">Moderator</span>
-                        <!-- Reply badge — hidden on deleted-by-moderator -->
-                        <template v-if="!is_moderator_deleted">
-                            <button
-                                v-if="!is_reply"
-                                class="ci-reply-badge"
-                                @click="onReplyClick"
-                            >Reply</button>
-                            <button
-                                v-else
-                                class="ci-reply-badge"
-                                @click="onReplyItemClick"
-                            >Reply</button>
-                        </template>
+                    <div class="ci-avatar">
+                        <img v-if="comment.user?.img" :src="toImageUrl(comment.user.img)" :alt="comment.user.name" />
+                        <i v-else class="fa fa-user"></i>
                     </div>
-                    <span class="ci-date">{{ formatDate(comment.created_at) }}</span>
+                    <div class="ci-meta">
+                        <div class="ci-name-row">
+                            <span class="ci-name">{{ comment.user?.name ?? 'Deleted user' }}</span>
+                            <span v-if="comment.user?.username" class="ci-username">@{{ comment.user.username }}</span>
+                            <!-- Moderator badge -->
+                            <span v-if="comment.user?.is_moderator" class="ci-mod-badge">Moderator</span>
+                            <!-- Reply badge — hidden on deleted-by-moderator -->
+                            <template v-if="!is_moderator_deleted">
+                                <button
+                                    v-if="!is_reply"
+                                    class="ci-reply-badge"
+                                    @click="onReplyClick"
+                                >Reply</button>
+                                <button
+                                    v-else
+                                    class="ci-reply-badge"
+                                    @click="onReplyItemClick"
+                                >Reply</button>
+                            </template>
+                        </div>
+                        <span class="ci-date">{{ formatDate(comment.created_at) }}</span>
+                    </div>
                 </div>
 
                 <div class="ci-header-right">
@@ -657,8 +655,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .ci-wrap {
-    display: flex;
-    gap: 12px;
+    display: block;
     padding: 14px 0;
     border-bottom: 1px solid #f0f0f0;
 }
@@ -680,25 +677,24 @@ onBeforeUnmount(() => {
     border-bottom: none;
 }
 
-.ci-avatar-col { flex-shrink: 0; }
-
 .ci-avatar {
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     overflow: hidden;
     background: #e0e0e0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 17px;
+    font-size: 16px;
     color: #aaa;
+    flex-shrink: 0;
 }
 
-.ci-reply .ci-avatar { width: 32px; height: 32px; font-size: 13px; }
+.ci-reply .ci-avatar { width: 30px; height: 30px; font-size: 12px; }
 .ci-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-.ci-body { flex: 1; min-width: 0; }
+.ci-body { min-width: 0; }
 
 /* Header */
 .ci-header {
@@ -709,7 +705,20 @@ onBeforeUnmount(() => {
     margin-bottom: 6px;
 }
 
-.ci-header-left { display: flex; flex-direction: column; gap: 2px; }
+.ci-header-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+    flex: 1;
+}
+
+.ci-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
 
 .ci-name-row {
     display: flex;
@@ -1161,6 +1170,21 @@ onBeforeUnmount(() => {
     padding: 0 0 8px;
     line-height: 1.5;
     word-break: break-word;
+}
+
+@media (max-width: 575px) {
+    .ci-replies {
+        padding-left: 8px;
+    }
+
+    .ci-like-btn {
+        padding: 2px 5px;
+        font-size: 12px;
+    }
+
+    .ci-header-right {
+        gap: 0;
+    }
 }
 
 /* Restore menu item */

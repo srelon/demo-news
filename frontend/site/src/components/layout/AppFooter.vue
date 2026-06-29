@@ -28,7 +28,7 @@ const layoutStore = useLayoutStore()
               <div class="p-t-15">
                 <a href="#" class="fs-18 cl11 hov-cl10 trans-03 m-r-8"><span class="fab fa-facebook-f"></span></a>
                 <a href="#" class="fs-18 cl11 hov-cl10 trans-03 m-r-8"><span class="fab fa-twitter"></span></a>
-                <a href="#" class="fs-18 cl11 hov-cl10 trans-03 m-r-8"><span class="fab fa-pinterest-p"></span></a>
+
                 <a href="#" class="fs-18 cl11 hov-cl10 trans-03 m-r-8"><span class="fab fa-vimeo-v"></span></a>
                 <a href="#" class="fs-18 cl11 hov-cl10 trans-03 m-r-8"><span class="fab fa-youtube"></span></a>
               </div>

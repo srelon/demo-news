@@ -5,9 +5,10 @@ DOCKER_COMPOSE := $(shell docker compose version > /dev/null 2>&1 && echo "docke
 
 PROFILES = --profile admin --profile site --profile phpmyadmin
 
-COMPOSE_FILES = -f docker-compose.yml
 ifneq ("$(wildcard /etc/letsencrypt/live)","")
-    COMPOSE_FILES += -f docker-compose.server.yml
+    COMPOSE_FILES = -f docker-compose.yml -f docker-compose.server.yml
+else
+    COMPOSE_FILES = -f docker-compose.yml -f docker-compose.override.yml
 endif
 
 up:
