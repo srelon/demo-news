@@ -2,7 +2,13 @@
 
 Full-stack news/blog platform with real-time features. Laravel 11 API + Vue 3 admin & site frontends.
 
-**Live demo:** https://demo-news.duckdns.org
+**Live demo:** https://demo-news.duckdns.org  
+**Admin panel:** https://demo-news.duckdns.org/admin/
+
+| Field    | Value             |
+|----------|-------------------|
+| Email    | test@admin.com    |
+| Password | 123456789         |
 
 ## Stack
 

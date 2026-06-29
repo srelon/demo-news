@@ -111,7 +111,7 @@ class RssFeedService
 
         if ($pattern = $this->matchSkipPattern($link)) {
             $item->update([
-                'status' => 'rejected',
+                'status' => 'ignored',
                 'reason' => "Skipped URL pattern: {$pattern}",
                 'reason_code' => 'skip_url',
             ]);
@@ -254,14 +254,14 @@ class RssFeedService
 
         if ($pattern = $this->matchSkipPattern($url)) {
             $item->update([
-                'status' => 'rejected',
+                'status' => 'ignored',
                 'reason' => "Skipped URL pattern: {$pattern}",
                 'reason_code' => 'skip_url',
             ]);
 
             return [
-                'ok' => false,
-                'reason' => "Skipped URL pattern: {$pattern}",
+                'ok' => true,
+                'ignored' => true,
             ];
         }
 

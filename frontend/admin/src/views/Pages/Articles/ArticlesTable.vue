@@ -13,9 +13,11 @@ import { useToast } from 'vue-toastification'
 const props = withDefaults(defineProps<{
     params?: Record<string, any>
     filterable_category?: boolean
+    update_url?: boolean
 }>(), {
     params: () => ({}),
     filterable_category: false,
+    update_url: true,
 })
 
 const emit = defineEmits<{
@@ -105,7 +107,7 @@ const headers = reactive([
 </script>
 
 <template>
-    <BaseTablePagination ref="table" route="articles" :headers="headers" :params="props.params">
+    <BaseTablePagination ref="table" route="articles" :headers="headers" :params="props.params" :update_url="props.update_url">
 
         <template #header_right>
             <slot name="header_right" />

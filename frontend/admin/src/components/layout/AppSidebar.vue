@@ -27,7 +27,7 @@ const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
 const siteUrl = import.meta.env.VITE_SITE_URL ?? '/'
 const base = import.meta.env.BASE_URL
 
-const menuGroups = computed(() => [
+const menuGroups = [
   {
     title: "Menu",
     items: [
@@ -110,7 +110,7 @@ const menuGroups = computed(() => [
       },
     ],
   },
-  ...(!auth.is_production ? [{
+  {
     title: "Tools",
     items: [
       {
@@ -120,14 +120,14 @@ const menuGroups = computed(() => [
         assets: "debug",
       },
     ],
-  }] : []),
+  },
   // {
   //   title: "Others",
   //   items: [
   //
   //   ],
   // },
-])
+];
 
 const isActive = (path) => route.name === path;
 
@@ -137,7 +137,7 @@ const toggleSubmenu = (groupIndex, itemIndex) => {
 };
 
 const isAnySubmenuRouteActive = computed(() => {
-  return menuGroups.value.some((group) =>
+  return menuGroups.some((group) =>
       group.items.some(
           (item) =>
               item.subItems && item.subItems.some((subItem) => isActive(subItem.path))
@@ -150,7 +150,7 @@ const isSubmenuOpen = (groupIndex, itemIndex) => {
   return (
       openSubmenu.value === key ||
       (isAnySubmenuRouteActive.value &&
-          menuGroups.value[groupIndex].items[itemIndex].subItems?.some((subItem) =>
+          menuGroups[groupIndex].items[itemIndex].subItems?.some((subItem) =>
               isActive(subItem.path)
           ))
   );

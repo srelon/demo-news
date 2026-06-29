@@ -11,6 +11,7 @@ interface Pagination {
 
 const props = defineProps<{
   pagination: Pagination
+  update_url?: boolean
 }>()
 
 const emit = defineEmits(['change'])
@@ -38,7 +39,9 @@ const lastVisible = computed(() => pages.value[pages.value.length - 1] ?? 0)
 
 const changePage = (page: number) => {
   if (page < 1 || page > lastPage.value) return
-  router.replace({ query: { ...route.query, page: page > 1 ? page : undefined } })
+  if (props.update_url !== false) {
+    router.replace({ query: { ...route.query, page: page > 1 ? page : undefined } })
+  }
   emit('change', page)
 }
 

@@ -17,10 +17,12 @@ const props = withDefaults(defineProps<{
     params?: Record<string, any>
     row_class?: (data: any) => string
     row_attrs?: (data: any, index: number) => Record<string, any>
+    update_url?: boolean
 }>(), {
     route_type: 'post',
     select_page: () => [10, 50, 100],
     params: () => ({}),
+    update_url: true,
 })
 
 defineSlots<{
@@ -56,13 +58,13 @@ const per_page = ref(props.select_page ? props.select_page[0] : 10)
 const page = ref<intPage | null>(null)
 const loading = ref(false)
 const search = ref(null)
-const current_page = ref(Number(route.query.page) || 1)
+const current_page = ref(props.update_url ? Number(route.query.page) || 1 : 1)
 
 loadPage()
 
 function changePage(val = 1) {
     current_page.value = val
-    if (val === 1) router.replace({ query: { ...route.query, page: undefined } })
+    if (props.update_url && val === 1) router.replace({ query: { ...route.query, page: undefined } })
     loadPage()
 }
 
@@ -176,7 +178,7 @@ function loadPage() {
                 <p class="pb-3 text-sm font-medium text-center text-gray-500 border-b border-gray-100 dark:border-gray-800 dark:text-gray-400 xl:border-b-0 xl:pb-0 xl:text-left">
                     Showing {{ page.from }} to {{ page.per_page }} of {{ page.total }} entries
                 </p>
-                <BasePagination :pagination="page" @change="changePage" />
+                <BasePagination :pagination="page" :update_url="update_url" @change="changePage" />
             </div>
         </div>
     </div>
