@@ -40,7 +40,7 @@ class SpaController extends Controller
             'title' => $article->seo_title ?: $article->title,
             'description' => $article->seo_description ?: ($article->excerpt ?? ''),
             'image' => $this->imageUrl($article->image),
-            'url' => $request->url(),
+            'url' => url($request->path()),
         ];
     }
 
@@ -75,7 +75,10 @@ HTML;
             $tags .= <<<HTML
 
     <meta property="og:image" content="{$image}">
+    <meta property="og:image:secure_url" content="{$image}">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{$title}">
+    <meta name="twitter:description" content="{$description}">
     <meta name="twitter:image" content="{$image}">
 HTML;
         }
