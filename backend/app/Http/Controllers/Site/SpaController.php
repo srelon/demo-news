@@ -15,7 +15,8 @@ class SpaController extends Controller
     {
         $html = file_get_contents(base_path('../frontend/site/dist/index.html'));
 
-        $parts = array_values(array_filter(explode('/', trim($request->path(), '/'))));
+        $uri = parse_url($request->server('REQUEST_URI', '/'), PHP_URL_PATH) ?? '/';
+        $parts = array_values(array_filter(explode('/', trim($uri, '/'))));
 
         if (count($parts) === 3) {
             $og = $this->resolveArticleOg($parts, $request);
