@@ -121,4 +121,53 @@ function items(tab: CategoryTab): TabArticle[] {
 .tab01-title-var {
   color: var(--category-color);
 }
+
+@media (max-width: 767px) {
+  :deep(.tab01-head) {
+    flex-wrap: wrap;
+    align-items: center;
+    height: auto;
+    min-height: 0;
+    padding-top: 10px;
+    padding-bottom: 6px;
+    row-gap: 6px;
+  }
+
+  :deep(.tab01-title) {
+    order: 1;
+    flex: 0 1 auto;
+    margin-right: auto;
+    padding-right: 8px;
+    padding-bottom: 0;
+  }
+
+  :deep(.tab01-link) {
+    order: 2;
+    flex-shrink: 0;
+    padding-left: 0;
+    width: auto;
+  }
+
+  :deep(.nav-tabs) {
+    order: 3;
+    width: 100%;
+    height: auto;
+    flex-shrink: 0;
+    border-top: 1px solid #ebebeb;
+    padding-top: 4px;
+  }
+
+  :deep(.nav-tabs .nav-item) {
+    height: auto;
+  }
+
+  :deep(.nav-link) {
+    height: auto;
+    padding: 5px 12px;
+  }
+
+  :deep(.nav-link.active::after) {
+    display: none;
+  }
+}
 </style>

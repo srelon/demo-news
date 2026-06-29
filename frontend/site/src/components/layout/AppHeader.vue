@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useLayoutStore, toImageUrl } from '@/stores/layout'
 import { useAuthStore } from '@/stores/auth'
@@ -16,9 +16,32 @@ const breadcrumbs = useBreadcrumbs()
 
 const search_query = ref('')
 const active_nav_tab = ref<Record<string, string>>({})
+const menu_open = ref(false)
 
 const auth_modal_tab = ref<'login' | 'register'>('login')
 const show_profile_modal = ref(false)
+
+function closeMenu() {
+    menu_open.value = false
+}
+
+watch(menu_open, (val) => {
+    document.body.style.overflow = val ? 'hidden' : ''
+})
+
+watch(() => route.fullPath, () => {
+    closeMenu()
+})
+
+function onKeydown(e: KeyboardEvent) {
+    if (e.key === 'Escape') {
+        closeMenu()
+        show_profile_modal.value = false
+    }
+}
+
+onMounted(() => document.addEventListener('keydown', onKeydown))
+onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
 
 function openLogin() {
     auth_modal_tab.value = 'login'
@@ -54,7 +77,6 @@ function logout() {
                         <router-link :to="{name: 'static_page', params: {slug: 'contact'}}" class="left-topbar-item">Contact</router-link>
                         <a href="#" class="left-topbar-item"><span class="fab fa-facebook-f"></span></a>
                         <a href="#" class="left-topbar-item"><span class="fab fa-twitter"></span></a>
-                        <a href="#" class="left-topbar-item"><span class="fab fa-pinterest-p"></span></a>
                         <a href="#" class="left-topbar-item"><span class="fab fa-vimeo-v"></span></a>
                         <a href="#" class="left-topbar-item"><span class="fab fa-youtube"></span></a>
                     </div>
@@ -91,21 +113,23 @@ function logout() {
                         <img src="/images/icons/logo-01.png" alt="IMG-LOGO">
                     </router-link>
                 </div>
-                <div class="btn-show-menu-mobile hamburger hamburger--squeeze m-r--8">
+                <div
+                    :class="['btn-show-menu-mobile hamburger hamburger--squeeze m-r--8', { 'is-active': menu_open }]"
+                    @click="menu_open = !menu_open"
+                >
                     <span class="hamburger-box">
                         <span class="hamburger-inner"></span>
                     </span>
                 </div>
             </div>
 
-            <div class="menu-mobile">
+            <div v-show="menu_open" class="menu-mobile">
                 <ul class="topbar-mobile">
                     <li class="left-topbar">
                         <router-link :to="{name: 'static_page', params: {slug: 'about'}}" class="left-topbar-item">About</router-link>
                         <router-link :to="{name: 'static_page', params: {slug: 'contact'}}" class="left-topbar-item">Contact</router-link>
                         <a href="#" class="left-topbar-item"><span class="fab fa-facebook-f"></span></a>
                         <a href="#" class="left-topbar-item"><span class="fab fa-twitter"></span></a>
-                        <a href="#" class="left-topbar-item"><span class="fab fa-pinterest-p"></span></a>
                         <a href="#" class="left-topbar-item"><span class="fab fa-vimeo-v"></span></a>
                         <a href="#" class="left-topbar-item"><span class="fab fa-youtube"></span></a>
                     </li>
@@ -248,7 +272,7 @@ function logout() {
     </header>
 
     <div class="container">
-        <div class="bg0 flex-wr-sb-c p-rl-20 p-tb-8">
+        <div class="bg0 flex-wr-sb-c p-rl-20 p-tb-8 breadcrumbs-row">
             <div class="breadcrumbs-wrap f2-s-1 p-r-30 m-tb-6">
                 <template v-for="(crumb, i) in breadcrumbs" :key="i">
                     <router-link v-if="crumb.to" :to="crumb.to" class="breadcrumb-item f1-s-3 cl9">
@@ -258,7 +282,7 @@ function logout() {
                 </template>
             </div>
 
-            <form class="pos-relative size-a-2 bo-1-rad-22 of-hidden bocl11 m-tb-6" @submit.prevent="submitSearch">
+            <form class="pos-relative size-a-2 bo-1-rad-22 of-hidden bocl11 m-tb-6 search-form" @submit.prevent="submitSearch">
                 <input
                     v-model="search_query"
                     class="f1-s-1 cl6 plh9 s-full p-l-25 p-r-45"
@@ -321,5 +345,36 @@ function logout() {
 .topbar-avatar-icon {
     margin-right: 4px;
     opacity: 0.85;
+}
+
+@media (max-width: 575px) {
+    .breadcrumbs-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .breadcrumbs-wrap {
+        max-width: 100%;
+        padding-right: 0;
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+    }
+
+    .breadcrumb-item {
+        font-size: 11px;
+    }
+
+    .breadcrumb-item--last {
+        max-width: 14ch;
+    }
+
+    .search-form {
+        width: 100% !important;
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+    }
 }
 </style>

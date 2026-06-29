@@ -24,4 +24,11 @@ onUnmounted(() => { document.body.style.overflow = '' })
     justify-content: center;
     padding: 16px;
 }
+
+@media (max-width: 600px) {
+    .base-modal-overlay {
+        padding: 0;
+        align-items: flex-start;
+    }
+}
 </style>

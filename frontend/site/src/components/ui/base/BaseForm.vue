@@ -99,7 +99,7 @@ function onSubmit(_: any, { setErrors }: any) {
                     @change="onFileChange($event, input)"
                 />
                 <div
-                    class="bf-upload"
+                    :class="['bf-upload', { 'bf-upload--circle': input.width && input.width === input.height }]"
                     :style="{
                         width: input.width ? input.width + 'px' : '100%',
                         height: input.height ? input.height + 'px' : undefined,

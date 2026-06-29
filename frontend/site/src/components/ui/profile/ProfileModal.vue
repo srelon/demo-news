@@ -263,4 +263,43 @@ onMounted(() => {
     padding: 8px 14px;
     margin-top: 12px;
 }
+
+@media (max-width: 768px) {
+    .pm-box {
+        padding: 24px 16px 32px;
+        max-width: 100%;
+        width: 100%;
+        min-height: 100dvh;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .pm-grid {
+        flex-direction: column;
+    }
+
+    .pm-col {
+        width: 100%;
+    }
+
+    .pm-col:first-child {
+        padding-right: 0;
+        padding-bottom: 28px;
+    }
+
+    .pm-col:last-child {
+        padding-left: 0;
+        padding-top: 28px;
+    }
+
+    .pm-divider {
+        width: 100%;
+        height: 1px;
+        align-self: auto;
+    }
+
+    :deep(.bf-upload--circle) {
+        margin: 0 auto;
+    }
+}
 </style>

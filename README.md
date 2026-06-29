@@ -1,4 +1,4 @@
-# dashboard.loc
+# Demo News
 
 Full-stack news/blog platform with real-time features. Laravel 11 API + Vue 3 admin & site frontends.
 
