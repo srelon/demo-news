@@ -72,6 +72,7 @@ function loadArticle(category: string, subcategory: string, slug: string) {
         category_slug: data.article.subcategory?.category?.slug ?? '',
         subcategory_slug: data.article.subcategory?.slug ?? '',
         title: data.article.title,
+        excerpt: data.article.seo_description || data.article.excerpt || '',
         author: data.article.author?.name ?? '',
         source_name: data.article.source_name ?? '',
         source_url: data.article.source_url ?? '',
@@ -144,7 +145,7 @@ watch(
 
               <div class="f1-s-11 cl6 p-b-25" v-html="article.body" @click="onBodyClick" />
 
-              <NewsPageFooter :tags="article.tags" :title="article.title" :image="article.image" />
+              <NewsPageFooter :tags="article.tags" :title="article.title" :excerpt="article.excerpt" :image="article.image" />
             </div>
 
             <BaseCommentsBlock :id="article.id" @total="comments_total = $event" />

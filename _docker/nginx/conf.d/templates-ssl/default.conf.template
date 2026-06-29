@@ -134,7 +134,14 @@ server {
     location / {
         root /var/www/frontend/site/dist;
 
+        set $bot_redirect 0;
         if ($is_social_bot) {
+            set $bot_redirect 1;
+        }
+        if ($uri ~* \.(jpg|jpeg|png|gif|webp|svg|ico|css|js|woff|woff2|ttf|eot|mp4|webm|json|xml|txt)$) {
+            set $bot_redirect 0;
+        }
+        if ($bot_redirect = 1) {
             return 302 /api/og-preview?path=$uri;
         }
 
