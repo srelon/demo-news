@@ -10,15 +10,10 @@ interface ArticleTag {
 const props = defineProps<{
   tags: ArticleTag[]
   title: string
-  image: string
 }>()
 
 const page_url = computed(() => encodeURIComponent(window.location.href))
 const page_title = computed(() => encodeURIComponent(props.title))
-const page_image = computed(() => {
-  const img = props.image.startsWith('http') ? props.image : window.location.origin + props.image
-  return encodeURIComponent(img)
-})
 
 const share_facebook = computed(() => `https://www.facebook.com/sharer/sharer.php?u=${page_url.value}`)
 const share_twitter = computed(() => `https://twitter.com/intent/tweet?url=${page_url.value}&text=${page_title.value}`)
