@@ -38,6 +38,15 @@ class LoginRequest extends FormRequest
 
         $user = Auth::guard('admin')->user();
 
+        if ($user->status !== 1) {
+            Auth::guard('admin')->logout();
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => 'Account is not active.',
+            ]);
+        }
+
         if ($user->allowed_ip && $user->allowed_ip !== $this->ip()) {
             Auth::guard('admin')->logout();
             RateLimiter::hit($this->throttleKey());

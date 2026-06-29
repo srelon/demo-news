@@ -8,18 +8,22 @@ use App\Models\Comment;
 use App\Models\CommentReport;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DashboardService
 {
-    public function getCurrentAdmin(Request $request): mixed
+    public function getCurrentAdmin(): mixed
     {
         $user = AdminUsers::getProfile(Auth::guard('admin')->id());
 
-        if ($user) {
-            $user->createLogs($request);
+        if (!$user) {
+            return null;
+        }
+
+        if ($user->status !== 1) {
+            Auth::guard('admin')->logout();
+            return null;
         }
 
         return $user;
