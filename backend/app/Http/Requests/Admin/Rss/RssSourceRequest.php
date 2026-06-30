@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Admin\Category;
+namespace App\Http\Requests\Admin\Rss;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class SubcategoryEditRequest extends FormRequest
+class RssSourceRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -18,8 +18,9 @@ class SubcategoryEditRequest extends FormRequest
 
         return [
             'name' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', Rule::unique('subcategories', 'slug')->ignore($id)],
-            'order' => ['nullable', 'integer'],
+            'url' => ['required', 'url', 'max:255', Rule::unique('rss_sources', 'url')->ignore($id)],
+            'subcategory_id' => ['required', 'integer', 'exists:subcategories,id'],
+            'active' => ['nullable', 'boolean'],
         ];
     }
 }

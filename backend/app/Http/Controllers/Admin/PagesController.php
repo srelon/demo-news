@@ -6,6 +6,7 @@ use App\Http\Requests\Admin\Page\PageRequest;
 use App\Models\Page;
 use App\Traits\RespondTrait;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class PagesController extends Controller
@@ -35,12 +36,24 @@ class PagesController extends Controller
             'active' => $request->input('active', true),
         ]);
 
+        if ($this->isDemoAdmin()) {
+            $page->update(['demo_created' => true]);
+        }
+
         return $this->respondWithJson($page->only(['id', 'slug', 'title', 'content', 'active']));
     }
 
     public function edit(int $id, PageRequest $request): JsonResponse
     {
         $page = Page::findOrFail($id);
+
+        if ($this->isDemoAdmin() && !$page->demo_snapshot) {
+            $page->update([
+                'demo_edited' => true,
+                'demo_snapshot' => $page->only(['slug', 'title', 'content', 'active']),
+            ]);
+        }
+
         $page->update([
             'title' => $request->input('title'),
             'content' => $request->input('content'),
@@ -48,5 +61,11 @@ class PagesController extends Controller
         ]);
 
         return $this->respondWithJson($page->only(['id', 'slug', 'title', 'content', 'active']));
+    }
+
+    private function isDemoAdmin(): bool
+    {
+        $email = config('demo.admin_email');
+        return $email && Auth::guard('admin')->user()?->email === $email;
     }
 }

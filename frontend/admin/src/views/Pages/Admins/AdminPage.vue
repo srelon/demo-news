@@ -144,6 +144,7 @@ onMounted(() => {
                     :user="user"
                     :options="options"
                     :schema="schema"
+                    route_back="admins"
                     :access="auth.accesses('admins', 'edit')"
                     @updateForm="fillForm"
                 >

@@ -26,7 +26,19 @@ const is_loading = ref(true)
 const page_title = ref('')
 ```
 
-**NO objects/arrays on one line.** Every property on its own line, always — no exceptions, even for short objects.
+**NO objects/arrays on one line.** Every property on its own line, always — no exceptions, even for short objects. Applies to **both PHP and TypeScript**.
+
+```php
+// WRONG
+['id' => 1, 'name' => 'World', 'slug' => 'world'],
+
+// RIGHT
+[
+    'id' => 1,
+    'name' => 'World',
+    'slug' => 'world',
+],
+```
 
 ```ts
 // WRONG

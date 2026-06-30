@@ -148,9 +148,9 @@ Route::prefix('profile')->controller(ProfileController::class)->middleware('admi
 
 Route::prefix('session/moderator')->controller(SessionController::class)->group(function () {
     Route::get('/', 'getModerator');
-    Route::post('/', 'setModerator');
-    Route::delete('/', 'clearModerator');
-    Route::get('/accounts', 'moderatorAccounts');
+    Route::post('/', 'setModerator')->middleware('admin');
+    Route::delete('/', 'clearModerator')->middleware('admin');
+    Route::get('/accounts', 'moderatorAccounts')->middleware('admin');
 });
 
 Route::prefix('upload')->controller(UploadController::class)->group(function () {
