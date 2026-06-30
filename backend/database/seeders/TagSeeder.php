@@ -8,9 +8,9 @@ use Illuminate\Support\Str;
 
 class TagSeeder extends Seeder
 {
-    public function run(): void
+    public static function tagNames(): array
     {
-        $tags = [
+        return [
             // News types
             'Breaking News', 'Exclusive', 'Interview', 'Analysis', 'Opinion',
             'Investigation', 'Report', 'Feature', 'Commentary', 'Review',
@@ -27,11 +27,14 @@ class TagSeeder extends Seeder
             'War', 'Diplomacy', 'Sanctions', 'Elections', 'Government',
             'Cryptocurrency', 'Blockchain', 'NFT', 'Web3', 'Social Media',
         ];
+    }
 
+    public function run(): void
+    {
         $now = now();
 
         Tag::insertOrIgnore(
-            collect($tags)->map(fn($name) => [
+            collect(static::tagNames())->map(fn($name) => [
                 'name' => $name,
                 'slug' => Str::slug($name),
                 'created_at' => $now,

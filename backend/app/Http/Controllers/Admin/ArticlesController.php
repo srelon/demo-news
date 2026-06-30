@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Admin\Article\ArticleCreateRequest;
-use App\Http\Requests\Admin\Article\ArticleEditRequest;
+use App\Http\Requests\Admin\Article\ArticleRequest;
 use App\Models\Tag;
 use App\Services\Admin\ArticleAdminService;
 use App\Services\Rss\RssFeedService;
@@ -81,14 +80,14 @@ class ArticlesController extends Controller
         ]);
     }
 
-    public function create(ArticleCreateRequest $request): JsonResponse
+    public function create(ArticleRequest $request): JsonResponse
     {
         $article = $this->service->create($request->validated(), $request->file('image'));
 
         return $this->respondWithJson($article);
     }
 
-    public function edit(ArticleEditRequest $request, int $id): JsonResponse
+    public function edit(ArticleRequest $request, int $id): JsonResponse
     {
         $article = $this->service->update($id, $request->validated(), $request->file('image'));
 

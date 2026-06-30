@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Admin\Rss\RssSourceCreateRequest;
-use App\Http\Requests\Admin\Rss\RssSourceEditRequest;
+use App\Http\Requests\Admin\Rss\RssSourceRequest;
 use App\Jobs\FetchRssFeeds;
 use App\Services\Admin\ArticleAdminService;
 use App\Services\Admin\RssSourceAdminService;
@@ -87,12 +86,12 @@ class RssSourcesController extends Controller
         ]);
     }
 
-    public function create(RssSourceCreateRequest $request): JsonResponse
+    public function create(RssSourceRequest $request): JsonResponse
     {
         return $this->respondWithJson($this->service->create($request->validated()));
     }
 
-    public function edit(RssSourceEditRequest $request, int $id): JsonResponse
+    public function edit(RssSourceRequest $request, int $id): JsonResponse
     {
         return $this->respondWithJson($this->service->update($id, $request->validated()));
     }

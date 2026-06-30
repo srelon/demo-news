@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Admin\Category\CategoryCreateRequest;
-use App\Http\Requests\Admin\Category\CategoryEditRequest;
-use App\Http\Requests\Admin\Category\SubcategoryCreateRequest;
-use App\Http\Requests\Admin\Category\SubcategoryEditRequest;
+use App\Http\Requests\Admin\Category\CategoryRequest;
+use App\Http\Requests\Admin\Category\SubcategoryRequest;
 use App\Http\Requests\Admin\Category\SubcategoryReorderRequest;
 use App\Services\Admin\CategoryAdminService;
 use Illuminate\Http\JsonResponse;
@@ -47,22 +45,22 @@ class CategoriesController extends Controller
         return $this->respondWithJson($this->service->find($id));
     }
 
-    public function create(CategoryCreateRequest $request): JsonResponse
+    public function create(CategoryRequest $request): JsonResponse
     {
         return $this->respondWithJson($this->service->create($request->validated()));
     }
 
-    public function edit(CategoryEditRequest $request, int $id): JsonResponse
+    public function edit(CategoryRequest $request, int $id): JsonResponse
     {
         return $this->respondWithJson($this->service->update($id, $request->validated()));
     }
 
-    public function subcategoryCreate(SubcategoryCreateRequest $request, int $category_id): JsonResponse
+    public function subcategoryCreate(SubcategoryRequest $request, int $category_id): JsonResponse
     {
         return $this->respondWithJson($this->service->createSubcategory($category_id, $request->validated()));
     }
 
-    public function subcategoryEdit(SubcategoryEditRequest $request, int $id): JsonResponse
+    public function subcategoryEdit(SubcategoryRequest $request, int $id): JsonResponse
     {
         return $this->respondWithJson($this->service->updateSubcategory($id, $request->validated()));
     }

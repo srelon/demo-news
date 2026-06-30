@@ -17,11 +17,15 @@ class Article extends Model
         'body', 'image', 'views', 'source_type', 'source_url',
         'source_name', 'status', 'published_at',
         'seo_title', 'seo_description', 'seo_keywords',
+        'demo_edited', 'demo_created', 'demo_snapshot',
     ];
 
     protected $casts = [
         'published_at' => 'datetime',
         'views' => 'integer',
+        'demo_edited' => 'boolean',
+        'demo_created' => 'boolean',
+        'demo_snapshot' => 'array',
     ];
 
     public function subcategory(): BelongsTo

@@ -9,6 +9,7 @@ use App\Services\CacheService;
 use App\Services\HtmlSanitizer;
 use App\Services\ImageService;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ArticleAdminService
@@ -195,6 +196,10 @@ class ArticleAdminService
 
         $this->syncTags($article, $data['tags'] ?? '');
 
+        if ($this->isDemoAdmin()) {
+            $article->update(['demo_created' => true]);
+        }
+
         CacheService::flushOnArticleWrite();
 
         return $this->find($article->id);
@@ -202,7 +207,27 @@ class ArticleAdminService
 
     public function update(int $id, array $data, ?UploadedFile $image): Article
     {
-        $article = Article::findOrFail($id);
+        $article = Article::with('tags')->findOrFail($id);
+
+        if ($this->isDemoAdmin() && !$article->demo_snapshot) {
+            $article->update([
+                'demo_edited' => true,
+                'demo_snapshot' => [
+                    'title' => $article->title,
+                    'slug' => $article->slug,
+                    'excerpt' => $article->excerpt,
+                    'body' => $article->body,
+                    'image' => $article->image,
+                    'subcategory_id' => $article->subcategory_id,
+                    'status' => $article->status,
+                    'published_at' => $article->published_at?->toDateTimeString(),
+                    'seo_title' => $article->seo_title,
+                    'seo_description' => $article->seo_description,
+                    'seo_keywords' => $article->seo_keywords,
+                    'tag_ids' => $article->tags->pluck('id')->toArray(),
+                ],
+            ]);
+        }
 
         if ($image) {
             $data['image'] = $this->image_service->upload($image, 'articles');
@@ -246,6 +271,12 @@ class ArticleAdminService
     public function categoryOptions(): array
     {
         return \App\Models\Category::select('id', 'name')->orderBy('name')->get()->toArray();
+    }
+
+    private function isDemoAdmin(): bool
+    {
+        $email = config('demo.admin_email');
+        return $email && Auth::guard('admin')->user()?->email === $email;
     }
 
     private function sanitizeHtml(string $html): string
