@@ -1,5 +1,6 @@
 export interface AdminCommentUser {
     id: number
+    public_id: string
     name: string
     username: string | null
     img: string | null
