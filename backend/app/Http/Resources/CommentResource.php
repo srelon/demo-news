@@ -32,6 +32,7 @@ class CommentResource extends JsonResource
             ),
             'user' => $this->user ? [
                 'id' => $this->user->id,
+                'public_id' => $this->user->public_id,
                 'name' => $this->user->name,
                 'username' => $this->user->username,
                 'img' => $this->user->img,

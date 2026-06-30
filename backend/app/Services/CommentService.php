@@ -90,7 +90,7 @@ class CommentService
     public function loadNewComment(Comment $comment): void
     {
         $comment->load([
-            'user:id,name,username,img',
+            'user:id,public_id,name,username,img',
             'repliedToComment.user:id,name,username',
             ...Comment::ARTICLE_RELATIONS,
         ]);
@@ -198,7 +198,7 @@ class CommentService
     private function commentWith(?int $user_id): array
     {
         return [
-            'user:id,name,username,img',
+            'user:id,public_id,name,username,img',
             'repliedToComment.user:id,name,username',
             'likes' => fn($q) => $user_id
                 ? $q->where('user_id', $user_id)->select(['comment_id', 'opp_type'])
