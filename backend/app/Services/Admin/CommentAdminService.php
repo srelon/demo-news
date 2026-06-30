@@ -108,6 +108,7 @@ class CommentAdminService
             'dislikes' => $c->dislikes_count ?? 0,
             'user' => $c->user ? [
                 'id' => $c->user->id,
+                'public_id' => $c->user->public_id,
                 'name' => $c->user->name,
                 'username' => $c->user->username,
                 'img' => $c->user->img,
@@ -126,7 +127,7 @@ class CommentAdminService
     private function commentWith(): array
     {
         return [
-            'user:id,name,username,img',
+            'user:id,public_id,name,username,img',
             ...Comment::ARTICLE_RELATIONS,
         ];
     }
