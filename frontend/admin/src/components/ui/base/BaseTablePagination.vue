@@ -116,7 +116,10 @@ function loadPage() {
 
     <div v-else class="rounded-xl bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <!-- Header: per-page select + search + slot -->
-        <div class="flex flex-col gap-2 px-4 py-4 border border-b-0 border-gray-100 dark:border-white/[0.05] rounded-t-xl sm:flex-row sm:items-center sm:justify-between">
+        <div :class="[
+            'flex flex-col gap-2 px-4 py-4 border border-b-0 border-gray-100 dark:border-white/[0.05] rounded-t-xl sm:flex-row sm:items-center',
+            select_page ? 'sm:justify-between' : 'sm:justify-end',
+        ]">
             <div v-if="select_page" class="flex shrink-0 items-center gap-3">
                 <span class="text-gray-500 dark:text-gray-400">Show</span>
                 <div class="relative z-20">
@@ -136,7 +139,10 @@ function loadPage() {
                 <span class="text-gray-500 dark:text-gray-400">entries</span>
             </div>
 
-            <div class="flex flex-wrap items-center gap-2 sm:justify-end">
+            <div :class="[
+                'flex flex-wrap items-center gap-2',
+                select_page ? 'sm:justify-end' : 'sm:justify-start',
+            ]">
                 <div class="relative min-w-[180px] flex-1 sm:max-w-[300px]">
                     <input
                         v-model="search"

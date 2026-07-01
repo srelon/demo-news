@@ -70,6 +70,8 @@ class DemoResetJob
         });
 
         Page::withTrashed()->where('demo_created', true)->forceDelete();
+
+        Page::onlyTrashed()->where('demo_created', false)->restore();
     }
 
     private function resetCategories(): void

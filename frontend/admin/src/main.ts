@@ -20,7 +20,7 @@ const pinia = createPinia()
 
 
 app.use(Toast, {
-    position: "bottom-right",
+    position: "top-right",
     timeout: 3000,
 });
 

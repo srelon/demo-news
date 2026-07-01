@@ -1,6 +1,7 @@
 ﻿<script setup lang="ts">
 import ExternalLinkOutlineIcon from '@/icons/ExternalLinkOutlineIcon.vue'
 import RefreshIcon from '@/icons/RefreshIcon.vue'
+import TrashOutlineIcon from '@/icons/TrashOutlineIcon.vue'
 import { ref, computed, watch } from 'vue'
 import { useToast } from 'vue-toastification'
 import { useRoute, useRouter } from 'vue-router'
@@ -11,6 +12,8 @@ import EditPage from '@/views/Core/EditPage.vue'
 import ArticleComments from '@/views/Pages/Articles/ArticleComments.vue'
 import BaseLoading from '@/components/ui/base/BaseLoading.vue'
 import BaseTabs from '@/components/ui/base/BaseTabs.vue'
+import BaseBtn from '@/components/ui/base/BaseBtn.vue'
+import BaseModal from '@/components/ui/base/BaseModal.vue'
 import { object, string } from 'yup'
 import { useAuthStore } from '@/stores/auth'
 
@@ -34,7 +37,12 @@ const breadcrumb = [
     },
 ]
 
-const today = new Date().toISOString().substring(0, 10)
+function formatLocalDateTime(date: Date): string {
+    const pad = (n: number) => String(n).padStart(2, '0')
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`
+}
+
+const now_local = formatLocalDateTime(new Date())
 
 const options = ref<Record<string, any>>({
   subcategory_id: {
@@ -84,9 +92,9 @@ const form = ref([
   },
   {
     name: 'published_at',
-    model: today,
+    model: now_local,
     placeholder: 'Published at',
-    type: 'date',
+    type: 'datetime',
   },
   {
     name: 'image',
@@ -174,7 +182,7 @@ function fillForm(data: any) {
         ...data.article,
         tags: data.tags,
         published_at: data.article.published_at
-            ? data.article.published_at.substring(0, 10)
+            ? formatLocalDateTime(new Date(data.article.published_at))
             : null,
     }
 
@@ -248,6 +256,27 @@ function refreshFromSource() {
             is_refreshing.value = false
         })
 }
+
+// ── Delete ────────────────────────────────────────────────────────────────────
+
+const show_delete = ref(false)
+const deleting = ref(false)
+
+function deleteArticle() {
+    if (deleting.value) return
+    deleting.value = true
+
+    axios.post(`article/delete/${route.params.id}`)
+        .then(() => {
+            toast.success('Article deleted successfully')
+            router.push({ name: 'articles' })
+        })
+        .catch((e) => {
+            deleting.value = false
+            show_delete.value = false
+            toast.error(e.response?.data?.errors?.message ?? 'Failed to delete article')
+        })
+}
 </script>
 
 <template>
@@ -277,6 +306,15 @@ function refreshFromSource() {
                         <ExternalLinkOutlineIcon class="w-4 h-4" />
                         View article
                     </a>
+                    <button
+                        v-if="!is_create && auth.accesses('articles', 'edit')"
+                        @click="show_delete = true"
+                        type="button"
+                        class="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-600 hover:border-error-400 hover:text-error-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-error-500 dark:hover:text-error-400 transition-colors"
+                    >
+                        <TrashOutlineIcon class="w-4 h-4" />
+                        Delete
+                    </button>
                 </div>
             </div>
 
@@ -347,5 +385,27 @@ function refreshFromSource() {
             </BaseTabs>
         </div>
         <BaseLoading v-else />
+
+        <BaseModal v-if="show_delete" @close="show_delete = false">
+            <template #body>
+                <div class="no-scrollbar relative w-full max-w-lg overflow-y-auto rounded-3xl bg-white p-6 dark:bg-gray-900 mx-5">
+                    <button
+                        @click="show_delete = false"
+                        class="absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-white/[0.07]"
+                    >✕</button>
+
+                    <h4 class="mb-2 text-xl font-semibold text-gray-800 dark:text-white/90">Delete Article</h4>
+
+                    <p class="mb-5 text-sm text-gray-500 dark:text-gray-400">
+                        Are you sure you want to delete this article? This action cannot be undone from the admin panel.
+                    </p>
+
+                    <div class="flex justify-end gap-3">
+                        <BaseBtn color="secondary" @click="show_delete = false">Cancel</BaseBtn>
+                        <BaseBtn color="error" :loading="deleting" @click="deleteArticle">Delete</BaseBtn>
+                    </div>
+                </div>
+            </template>
+        </BaseModal>
     </AdminLayout>
 </template>

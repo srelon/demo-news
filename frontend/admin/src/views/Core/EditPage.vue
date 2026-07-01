@@ -63,7 +63,10 @@ function onSubmit(_: any, {setErrors}: any) {
     const parsedForm = Object.fromEntries(
       props.form
         .filter(i => !(i.type === 'file' && i.model === null))
-        .map(i => [i.name, i.model])
+        .map(i => [
+          i.name,
+          (i.type === 'datetime' && i.model) ? new Date(i.model.replace(' ', 'T')).toISOString() : i.model,
+        ])
     );
 
     axios.post(props.route, parsedForm, {
@@ -229,6 +232,22 @@ function uploadFile(e: Event, field: any) {
               </Field>
 
               <Field
+                  v-else-if="input.type === 'checkbox'"
+                  :name="input.name"
+                  v-model="input.model"
+                  v-slot="{ errorMessage }"
+              >
+                <BaseInput
+                    type="checkbox"
+                    :name="input.name"
+                    :modelValue="input.model"
+                    @update:modelValue="(val: boolean) => input.model = val ? 1 : 0"
+                    :disabled="input.disabled || !access"
+                />
+                <p v-if="errorMessage" class="text-red-500 text-xs mt-1">{{ errorMessage }}</p>
+              </Field>
+
+              <Field
                   v-else-if="input.type === 'select'"
                   :name="input.name"
                   v-model="input.model"
@@ -307,6 +326,26 @@ function uploadFile(e: Event, field: any) {
                 <FlatPickr
                     v-model="input.model"
                     :config="{ dateFormat: 'Y-m-d', allowInput: true, disableMobile: true }"
+                    :disabled="input.disabled || !access"
+                    :class="[
+                      'dark:bg-dark-900 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30',
+                      errorMessage
+                        ? 'border-red-400 focus:border-red-400 focus:ring-red-500/10 dark:border-red-600'
+                        : 'border-gray-300 focus:border-brand-300 focus:ring-brand-500/10 dark:border-gray-700 dark:focus:border-brand-800'
+                    ]"
+                />
+                <p v-if="errorMessage" class="text-red-500 text-xs mt-1">{{ errorMessage }}</p>
+              </Field>
+
+              <Field
+                  v-else-if="input.type === 'datetime'"
+                  :name="input.name"
+                  v-model="input.model"
+                  v-slot="{ errorMessage }"
+              >
+                <FlatPickr
+                    v-model="input.model"
+                    :config="{ dateFormat: 'Y-m-d H:i', enableTime: true, time_24hr: true, minuteIncrement: 1, allowInput: true, disableMobile: true }"
                     :disabled="input.disabled || !access"
                     :class="[
                       'dark:bg-dark-900 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30',

@@ -20,6 +20,7 @@ class PageSeeder extends Seeder
 <p>Founded in 2020, our editorial team consists of seasoned journalists, analysts, and digital media experts who share a passion for storytelling and a dedication to the truth.</p>
 <h3>Contact Us</h3>
 <p>Have a tip or a story to share? Reach out to us at <a href="mailto:editorial@newsportal.com">editorial@newsportal.com</a>. We value reader feedback and are always looking for ways to improve our coverage.</p>',
+            'deletion_protected' => true,
         ]);
 
         Page::create([
@@ -30,6 +31,7 @@ class PageSeeder extends Seeder
 <p><strong>Email:</strong> contact@newsportal.com</p>
 <p><strong>Phone:</strong> +1 (555) 123-4567</p>
 <p><strong>Address:</strong> 123 News Street, Media City, NY 10001</p>',
+            'deletion_protected' => true,
         ]);
     }
 }

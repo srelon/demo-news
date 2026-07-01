@@ -117,6 +117,7 @@ Route::prefix('page')->controller(PagesController::class)->group(function () {
     Route::get('/{id}', 'info')->middleware('access:articles.view');
     Route::post('/create', 'create')->middleware('access:articles.edit');
     Route::post('/edit/{id}', 'edit')->middleware('access:articles.edit');
+    Route::post('/delete/{id}', 'delete')->middleware('access:articles.edit');
 });
 
 // Comment lists are visible to every admin, mutations require moderator.edit
