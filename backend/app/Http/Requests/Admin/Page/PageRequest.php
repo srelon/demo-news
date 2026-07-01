@@ -17,6 +17,7 @@ class PageRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'content' => ['nullable', 'string'],
             'active' => ['nullable', 'boolean'],
+            'deletion_protected' => ['nullable', 'boolean'],
         ];
     }
 }
